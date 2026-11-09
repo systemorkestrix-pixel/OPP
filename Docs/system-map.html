@@ -1,0 +1,2670 @@
+﻿<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OpenProperty � Cartographie du système · خر�`طة ا�� ظا�&</title>
+<style>
+/* ��������������������������������������������������  Base  �������������������������������������������������� */
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --bg:#f6f7f9;
+  --panel:#fff;
+  --ink:#0f172a;
+  --ink2:#334155;
+  --muted:#64748b;
+  --line:#e4e8ee;
+  --line2:#eef1f5;
+  --brand:#0e7490;
+  --ok:#0f9d63;
+  --no:#c3ccd8;
+  --radius:14px;
+  --shadow:0 1px 2px rgba(15,23,42,.04),0 10px 30px -18px rgba(15,23,42,.25);
+  --mono:ui-monospace,"Cascadia Mono",Consolas,"SF Mono",monospace;
+}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+html[lang="ar"] body{font-family:"Segoe UI","Noto Naskh Arabic","Traditional Arabic",Tahoma,sans-serif;line-height:1.85}
+h1,h2,h3,h4,p{margin:0}
+code{font-family:var(--mono);font-size:.86em;background:#eef2f6;color:#0b4f60;padding:.12em .4em;border-radius:5px;white-space:nowrap}
+::selection{background:#0e749022}
+
+/* ��������������������������������������������������  Shell  ������������������������������������������������ */
+.topbar{
+  position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+}
+.topbar__in{
+  max-width:1280px;margin:0 auto;padding:0 24px;height:64px;
+  display:flex;align-items:center;gap:14px;
+}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.brand__mark{
+  width:34px;height:34px;border-radius:9px;flex:none;
+  background:linear-gradient(145deg,#0e7490,#155e75);
+  display:grid;place-items:center;color:#fff;font-weight:700;font-size:15px;letter-spacing:-.5px;
+}
+.brand__txt{min-width:0}
+.brand__name{font-weight:650;font-size:15px;letter-spacing:-.2px;line-height:1.2}
+.brand__sub{font-size:11.5px;color:var(--muted);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar__spacer{flex:1}
+.tools{display:flex;align-items:center;gap:8px}
+.lang{
+  display:flex;gap:2px;background:#eef1f5;padding:3px;border-radius:9px;
+}
+.lang button{
+  border:0;background:transparent;font:inherit;font-size:12.5px;font-weight:600;
+  color:var(--muted);padding:5px 12px;border-radius:7px;cursor:pointer;transition:.16s;
+}
+.lang button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(15,23,42,.1)}
+.btn-ghost{
+  border:1px solid var(--line);background:#fff;color:var(--ink2);font:inherit;font-size:12.5px;
+  padding:6px 12px;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;
+}
+.btn-ghost:hover{border-color:#cfd8e3;background:#fbfcfd}
+
+.body{max-width:1280px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:236px minmax(0,1fr);gap:40px}
+.toc{position:sticky;top:88px;align-self:start;padding:28px 0;max-height:calc(100vh - 88px);overflow:auto}
+.toc__title{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.toc a{
+  display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--muted);
+  font-size:13px;padding:7px 10px;border-radius:8px;border-inline-start:2px solid transparent;
+  transition:.15s;
+}
+.toc a:hover{color:var(--ink);background:#eef1f5}
+.toc a.on{color:var(--ink);background:#fff;border-inline-start-color:var(--brand);font-weight:600;box-shadow:var(--shadow)}
+.toc a .n{font-family:var(--mono);font-size:10.5px;color:#94a3b8;font-weight:600}
+.toc a.on .n{color:var(--brand)}
+main{padding:28px 0 96px;min-width:0}
+
+/* ��������������������������������������������������  Sections  ������������������������������������������ */
+.sec{margin-bottom:64px;scroll-margin-top:88px}
+.sec__head{display:flex;align-items:flex-start;gap:14px;margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.sec__num{
+  font-family:var(--mono);font-size:11px;font-weight:700;color:var(--brand);
+  background:#e6f2f5;border:1px solid #cfe4ea;padding:3px 7px;border-radius:6px;margin-top:5px;flex:none;
+}
+.sec__title{font-size:21px;font-weight:680;letter-spacing:-.35px;line-height:1.25}
+.sec__sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+
+/* ��������������������������������������������������  Hero  �������������������������������������������������� */
+.hero{
+  background:linear-gradient(160deg,#0f2f3a,#0b1b22 60%);
+  color:#e6eef2;border-radius:18px;padding:34px 34px 30px;margin-bottom:26px;
+  position:relative;overflow:hidden;
+}
+.hero::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(600px 220px at 88% -10%,rgba(45,212,191,.22),transparent 70%);
+}
+.hero__eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#7dd3c8;font-weight:700;margin-bottom:12px}
+.hero h1{font-size:29px;line-height:1.25;font-weight:680;letter-spacing:-.5px;margin-bottom:10px}
+.hero p{color:#a9c0c9;font-size:14px;max-width:640px}
+.hero__meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.pill{
+  font-size:11.5px;padding:4px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.16);
+  color:#cfe0e6;background:rgba(255,255,255,.05);
+}
+.pill b{color:#fff;font-weight:600}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+.stat__n{font-size:26px;font-weight:700;letter-spacing:-1px;font-variant-numeric:tabular-nums;line-height:1.2}
+.stat__l{font-size:12px;color:var(--muted);margin-top:1px}
+.stat__l span{display:block;font-size:11px;color:#94a3b8}
+
+/* ��������������������������������������������������  Lifecycle  ���������������������������������������� */
+.band{
+  display:flex;align-items:center;gap:12px;margin:26px 0 14px;
+  font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);
+}
+.band::after{content:"";flex:1;height:1px;background:var(--line)}
+.band:first-child{margin-top:0}
+.band__tag{border:1px solid var(--line);background:#fff;padding:3px 9px;border-radius:999px}
+
+.stages{display:flex;flex-direction:column}
+.stage{display:grid;grid-template-columns:52px minmax(0,1fr);gap:18px}
+.stage__rail{display:flex;flex-direction:column;align-items:center}
+.stage__num{
+  width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex:none;
+  font-family:var(--mono);font-size:12px;font-weight:700;
+  background:var(--c-soft);color:var(--c);border:1px solid var(--c-line);
+}
+.stage__line{width:2px;flex:1;background:linear-gradient(var(--c-line),var(--line));margin:6px 0}
+.stage:last-child .stage__line{display:none}
+.stage__card{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:16px 18px;margin-bottom:14px;box-shadow:var(--shadow);
+  border-inline-start:3px solid var(--c);
+}
+.stage__top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.stage__name{font-size:15.5px;font-weight:660;letter-spacing:-.15px}
+.stage__sub{font-size:12px;color:var(--muted)}
+.stage__tables{display:flex;gap:5px;flex-wrap:wrap;margin-inline-start:auto}
+.tbl{
+  font-family:var(--mono);font-size:10.5px;background:#f1f4f8;color:#475569;
+  border:1px solid var(--line2);padding:2px 6px;border-radius:5px;
+}
+.stage__desc{font-size:13.5px;color:var(--ink2);margin-bottom:10px}
+.stage__rule{
+  display:flex;gap:8px;font-size:12.5px;color:#475569;background:#f8fafb;
+  border:1px solid var(--line2);border-radius:9px;padding:9px 11px;margin-bottom:10px;
+}
+.stage__rule svg{flex:none;margin-top:2px;color:var(--c)}
+.stage__foot{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.access{
+  display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;
+  padding:3px 9px;border-radius:999px;
+}
+.access--all{background:#e8f7f0;color:#067a4e;border:1px solid #c6ecdb}
+.access--admin{background:#f2eafd;color:#6b3fa8;border:1px solid #e0d0f6}
+.access--owner{background:#fdf4e3;color:#9a6a12;border:1px solid #f3e3c0}
+.access .dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+
+/* ��������������������������������������������������  Data map  ������������������������������������������ */
+.chain{
+  display:flex;align-items:stretch;gap:6px;flex-wrap:wrap;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:16px;margin-bottom:18px;
+}
+.chain__node{
+  flex:1 1 130px;border-radius:9px;padding:10px 12px;background:#f8fafc;border:1px solid var(--line2);
+  border-top:2px solid var(--c,#94a3b8);min-width:0;
+}
+.chain__node b{display:block;font-size:12.5px;font-weight:640;line-height:1.3}
+.chain__node span{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.chain__sep{display:grid;place-items:center;color:#b6c2cf;font-size:11px;flex:none;padding:0 1px}
+html[dir="rtl"] .chain__sep{transform:scaleX(-1)}
+
+.entities{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:12px}
+.ent{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px 16px;box-shadow:var(--shadow);
+}
+.ent__head{display:flex;align-items:baseline;gap:8px;margin-bottom:9px;padding-bottom:8px;border-bottom:1px solid var(--line2)}
+.ent__name{font-size:13.5px;font-weight:650}
+.ent__tbl{font-family:var(--mono);font-size:10px;color:var(--muted);margin-inline-start:auto}
+.ent__rel{display:flex;flex-direction:column;gap:5px}
+.rel{display:flex;align-items:baseline;gap:7px;font-size:12px;color:var(--ink2)}
+.rel code{font-size:10.5px}
+.rel__card{
+  font-family:var(--mono);font-size:9.5px;font-weight:700;color:#475569;
+  background:#eef2f6;border-radius:4px;padding:1px 5px;flex:none;
+}
+.rel__card.one{color:#0e7490;background:#e4f2f6}
+.rel__card.many{color:#9a3412;background:#fdeee6}
+
+/* ��������������������������������������������������  Roles  ������������������������������������������������ */
+.ladder{display:grid;gap:12px;margin-bottom:26px}
+.role{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:0;overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:.18s;
+  border-inline-start:4px solid var(--c);
+}
+.role:hover{border-color:#cfd8e3}
+.role[data-focus="true"]{box-shadow:0 0 0 2px var(--c-soft),var(--shadow)}
+.role__in{display:grid;grid-template-columns:180px minmax(0,1fr);gap:20px;padding:16px 20px}
+.role__id{display:flex;flex-direction:column;gap:3px}
+.role__rank{font-family:var(--mono);font-size:10px;color:#94a3b8;letter-spacing:.08em}
+.role__name{font-size:16px;font-weight:680;letter-spacing:-.2px}
+.role__key{font-family:var(--mono);font-size:10.5px;color:var(--c);background:var(--c-soft);border-radius:5px;padding:1px 6px;align-self:flex-start;margin-top:2px}
+.role__scope{font-size:12.5px;color:var(--muted);margin-top:4px}
+.role__body{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-width:0}
+.role__col h4{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:7px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-size:11.5px;padding:2px 8px;border-radius:6px;border:1px solid var(--line2);background:#f8fafb;color:var(--ink2)}
+.chip.yes{border-color:#c6ecdb;background:#eef9f4;color:#067a4e}
+.chip.no{border-color:#f0e2e2;background:#fbf3f3;color:#a15555}
+.coverage{display:flex;gap:3px;align-items:center;margin-top:10px}
+.coverage i{
+  width:16px;height:16px;border-radius:4px;display:grid;place-items:center;font-style:normal;
+  font-family:var(--mono);font-size:8.5px;font-weight:700;
+  background:#eef1f5;color:#b0bcc9;border:1px solid #e4e8ee;
+}
+.coverage i.on{background:var(--c-soft);color:var(--c);border-color:var(--c-line)}
+.coverage i.part{background:repeating-linear-gradient(45deg,var(--c-soft),var(--c-soft) 3px,#fff 3px,#fff 6px);color:var(--c);border-color:var(--c-line)}
+.coverage__lbl{font-size:10.5px;color:#94a3b8;margin-inline-start:6px}
+
+.matrix-wrap{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.matrix-hd{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.matrix-hd h3{font-size:13.5px;font-weight:650}
+.matrix-hd p{font-size:11.5px;color:var(--muted)}
+.legend{margin-inline-start:auto;display:flex;gap:12px;font-size:11px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:4px}
+.legend b{font-size:12px}
+table.matrix{width:100%;border-collapse:collapse;font-size:13px}
+table.matrix th,table.matrix td{padding:9px 14px;text-align:start;border-bottom:1px solid var(--line2)}
+table.matrix thead th{
+  position:sticky;top:64px;background:#fbfcfd;z-index:1;
+  font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;
+  border-bottom:1px solid var(--line);
+}
+table.matrix thead th:not(:first-child){text-align:center;width:110px}
+table.matrix td:not(:first-child){text-align:center}
+table.matrix tbody tr:last-child td{border-bottom:0}
+table.matrix tbody tr:hover{background:#fafbfc}
+.grp td{background:#f5f7fa;font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:6px 14px}
+.cap{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cap code{font-size:10.5px}
+.cap em{font-style:normal;font-size:11.5px;color:var(--muted)}
+.mark{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:6px;font-size:12px;font-weight:700}
+.mark.y{background:#e8f7f0;color:#0f9d63}
+.mark.n{background:#f4f6f8;color:#b6c2cf}
+table.matrix.focus-manager .col-manager,
+table.matrix.focus-admin .col-admin,
+table.matrix.focus-owner .col-owner{background:#f7fbfc}
+table.matrix.focus-manager tr:not(:has(.col-manager .mark.y)) td:not(.col-manager){opacity:.42}
+table.matrix.focus-admin tr:not(:has(.col-admin .mark.y)) td:not(.col-admin){opacity:.42}
+table.matrix.focus-owner tr:not(:has(.col-owner .mark.y)) td:not(.col-owner){opacity:.42}
+
+.notes{display:grid;gap:8px;margin-top:16px}
+.note{
+  display:flex;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:11px 14px;font-size:12.5px;color:var(--ink2);
+}
+.note b{color:var(--ink);font-weight:640}
+.note__i{
+  flex:none;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;
+  background:#e6f2f5;color:var(--brand);font-size:10.5px;font-weight:700;margin-top:1px;
+}
+
+/* ��������������������������������������������������  Pipeline  ������������������������������������������ */
+.pipe{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:10px}
+.step{
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 15px;
+  position:relative;box-shadow:var(--shadow);
+}
+.step__n{
+  font-family:var(--mono);font-size:10px;font-weight:700;color:var(--brand);
+  background:#e6f2f5;border-radius:5px;padding:1px 6px;display:inline-block;margin-bottom:6px;
+}
+.step b{display:block;font-size:13px;font-weight:650;margin-bottom:3px}
+.step p{font-size:11.5px;color:var(--muted);line-height:1.55}
+.step code{font-size:10px}
+.step--public{background:#fffdf5;border-color:#f0e4c4}
+.step--public .step__n{background:#fdf4e3;color:#9a6a12}
+
+/* ��������������������������������������������������  Reference  ���������������������������������������� */
+.refs{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.ref{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+.ref h4{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:9px}
+.st{display:flex;flex-wrap:wrap;gap:5px}
+.st span{font-family:var(--mono);font-size:10.5px;padding:2px 7px;border-radius:5px;background:#f1f4f8;color:#475569;border:1px solid var(--line2)}
+.st span.money{background:#eef9f4;color:#067a4e;border-color:#c6ecdb}
+.st span.warn{background:#fdf4e3;color:#9a6a12;border-color:#f3e3c0}
+.st span.danger{background:#fbf0ee;color:#a1452c;border-color:#f2dcd6}
+
+details.routes{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);margin-top:14px;overflow:hidden}
+details.routes summary{
+  padding:13px 18px;cursor:pointer;font-size:13px;font-weight:600;list-style:none;
+  display:flex;align-items:center;gap:8px;
+}
+details.routes summary::-webkit-details-marker{display:none}
+details.routes summary::after{content:"��";margin-inline-start:auto;color:var(--muted);font-size:11px;transition:.2s}
+details.routes[open] summary::after{transform:rotate(180deg)}
+.routes__body{padding:0 18px 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.rg h5{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-weight:700}
+.rg ul{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.rg li{font-family:var(--mono);font-size:10.5px;color:#475569;display:flex;gap:6px}
+.rg li b{font-size:9.5px;font-weight:700;border-radius:3px;padding:0 4px;flex:none;background:#eef2f6;color:#64748b;margin-top:2px}
+.rg li b.g{color:#067a4e;background:#eef9f4}
+.rg li b.p{color:#9a6a12;background:#fdf4e3}
+.rg li b.u{color:#1d4ed8;background:#eaf0fd}
+.rg li b.d{color:#a1452c;background:#fbf0ee}
+
+footer{
+  border-top:1px solid var(--line);padding:18px 0 0;margin-top:8px;
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;
+  font-size:11.5px;color:#94a3b8;
+}
+
+/* ��������������������������������������������������  Responsive  �������������������������������������� */
+@media (max-width:1000px){
+  .body{grid-template-columns:1fr;gap:0;padding:0 20px}
+  .toc{
+    position:sticky;top:64px;z-index:20;background:var(--bg);padding:10px 0;
+    max-height:none;overflow:auto;border-bottom:1px solid var(--line);
+  }
+  .toc__title{display:none}
+  .toc nav{display:flex;gap:4px;overflow:auto;padding-bottom:2px}
+  .toc a{white-space:nowrap;border-inline-start:0;border-bottom:2px solid transparent;border-radius:7px}
+  .toc a.on{border-inline-start-color:transparent;border-bottom-color:var(--brand);box-shadow:none}
+  .toc a .n{display:none}
+  .role__in{grid-template-columns:1fr;gap:12px}
+  .role__body{grid-template-columns:1fr}
+  table.matrix thead th{top:0;position:static}
+  .matrix-hd{flex-direction:column;align-items:flex-start}
+  .legend{margin-inline-start:0}
+}
+@media (max-width:640px){
+  .topbar__in{padding:0 16px;height:58px}
+  .brand__sub{display:none}
+  .hero{padding:24px 20px}
+  .hero h1{font-size:23px}
+  .stage{grid-template-columns:36px minmax(0,1fr);gap:10px}
+  .stage__num{width:28px;height:28px;font-size:10.5px;border-radius:8px}
+  .stage__tables{margin-inline-start:0}
+  .stat__n{font-size:22px}
+  table.matrix th,table.matrix td{padding:8px 9px}
+  table.matrix thead th:not(:first-child){width:56px}
+  .cap em{display:none}
+  .cap code{font-size:9.5px}
+}
+
+/* ��������������������������������������������������  Print  ������������������������������������������������ */
+@media print{
+  :root{--shadow:none}
+  body{background:#fff;font-size:11pt}
+  .topbar,.toc,.lang,.btn-ghost{display:none!important}
+  .body{display:block;padding:0;max-width:none}
+  main{padding:0}
+  .hero{background:#0f2f3a!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .stage__card,.ent,.role,.step,.ref,.matrix-wrap,.chain{break-inside:avoid;page-break-inside:avoid}
+  .sec{break-inside:auto;margin-bottom:28px}
+  details.routes{display:none}
+  a{text-decoration:none;color:inherit}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar__in">
+    <div class="brand">
+      <div class="brand__mark">OP</div>
+      <div class="brand__txt">
+        <div class="brand__name">OpenProperty</div>
+        <div class="brand__sub" id="brandSub"></div>
+      </div>
+    </div>
+    <div class="topbar__spacer"></div>
+    <div class="tools">
+      <div class="lang" role="group" aria-label="Langue / ا��غة">
+        <button type="button" data-lang="fr" aria-pressed="true">Français</button>
+        <button type="button" data-lang="ar" aria-pressed="false">ا�عرب�`ة</button>
+      </div>
+      <button class="btn-ghost" type="button" id="printBtn"></button>
+    </div>
+  </div>
+</header>
+
+<div class="body">
+  <aside class="toc">
+    <div class="toc__title" id="tocTitle"></div>
+    <nav id="tocNav"></nav>
+  </aside>
+  <main id="main"></main>
+</div>
+
+<noscript>
+  <p style="padding:24px;text-align:center">Cette page nécessite JavaScript. · �!ذ�! ا�صفحة تتط�ب JavaScript.</p>
+</noscript>
+
+<script>
+(function () {
+"use strict";
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 1. Language model �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+var LANG = "fr";
+try {
+  var fromUrl = (location.search.match(/[?&]lang=(fr|ar)\b/) || [])[1];
+  var saved = localStorage.getItem("op-doc-lang");
+  if (fromUrl) LANG = fromUrl;
+  else if (saved === "ar" || saved === "fr") LANG = saved;
+} catch (e) {}
+
+/** t({fr,ar}) �  active string */
+function t(v) {
+  if (v && typeof v === "object" && !Array.isArray(v) && ("fr" in v)) return v[LANG];
+  return v;
+}
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 2. Chrome strings �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+var UI = {
+  brandSub:  { fr: "Guide d'utilisation", ar: "د��`� ا�استخدا�&" },
+  print:     { fr: "Exporter en PDF", ar: "تصد�`ر PDF" },
+  tocTitle:  { fr: "Sommaire", ar: "ا��&حت���`ات" },
+  heroEyebrow:{ fr: "Guide d'utilisation", ar: "د��`� ا�استخدا�&" },
+  heroTitle: { fr: "OpenProperty � Comment fonctionne le système", ar: "OpenProperty � ْ�`ف �`ع�&� ا�� ظا�&" },
+  heroText:  {
+    fr: "Un aperçu simple du parcours à suivre au quotidien : depuis l'ajout d'un bien jusqu'au suivi des paiements et à la maintenance.",
+    ar: "� ظرة �&بسطة ع��0 ْ�`ف�`ة ا�ع�&� ا��`���&�`: �&�  إضافة ا�ع�ار حت�0 �&تابعة ا��&دف��عات ��ا�ص�`ا� ة."
+  },
+  legendAll: { fr: "Les 3 rôles", ar: "ا�أد��ار ا�ث�اثة" },
+  legendAdmin:{ fr: "Admin + Owner", ar: "ا��&سؤ��� + ا��&ا�ْ" },
+  legendOwner:{ fr: "Owner uniquement", ar: "ا��&ا�ْ ف�ط" },
+  matrixTitle:{ fr: "Matrice des capacités", ar: "�&صف��فة ا�ص�اح�`ات" },
+  matrixSub: { fr: "13 capacités restreintes. Cliquez sur un rôle pour isoler sa colonne.", ar: "13 ص�اح�`ة �&��`�}�دة. اضغط ع��0 أ�` د��ر �عز� ع�&��د�!." },
+  legendYes: { fr: "autorisé", ar: "�&س�&��ح" },
+  legendNo:  { fr: "refusé", ar: "�&�&� ��ع" },
+  roleFocus: { fr: "Rôle sélectionné � cliquez à nouveau pour réinitialiser.", ar: "ت�& اخت�`ار ا�د��ر � اضغط �&رة أخر�0 ��إ�غاء." },
+  basePlane: {
+    fr: "Plan opérationnel de base � <b>les 3 rôles</b>",
+    ar: "ا��&ست���0 ا�تشغ�`��` ا�أساس�` � <b>ا�أد��ار ا�ث�اثة</b>"
+  },
+  basePlaneTxt: {
+    fr: "Biens, unités, locataires, baux, charges, paiements, maintenance, fournisseurs et applications sont accessibles à toute session valide. Les capacités restreintes ci-dessus s'y ajoutent.",
+    ar: "ا�ع�ارات ��ا���حدات ��ا��&ستأجر���  ��ا�ع���د ��ا�ف��ات�`ر ��ا�دفعات ��ا�ص�`ا� ة ��ا��&��رد���  ��ا�ط�بات �&تاحة �أ�` ج�سة صا�حة. ا�ص�اح�`ات ا��&��`�}�دة أع�ا�! تُضاف إ��`�!ا."
+  },
+  can:  { fr: "Peut", ar: "�`ستط�`ع" },
+  cant: { fr: "Ne peut pas", ar: "�ا �`ستط�`ع" },
+  coverage: { fr: "Couverture du cycle", ar: "تغط�`ة ا�د��رة" },
+  links: { fr: "Relations", ar: "ا�ع�ا�ات" },
+  tables: { fr: "Tables", ar: "ا�جدا���" },
+  rule: { fr: "Règle", ar: "�اعدة" },
+  access: { fr: "Accès", ar: "ا���ص���" },
+  routesTitle: { fr: "58 routes API � par groupe", ar: "58 �&سارا�9 ف�` ا�٬ API � حسب ا��&ج�&��عة" },
+  publicRoutes: { fr: "Routes publiques (sans session) : <code>/api/health</code>, <code>/api/auth/login</code>, <code>/api/auth/logout</code>, <code>/api/auth/session</code>, <code>/api/auth/status</code>, <code>/api/auth/bootstrap</code>.", ar: "�&سارات عا�&ة (بد���  ج�سة): <code>/api/health</code>�R <code>/api/auth/login</code>�R <code>/api/auth/logout</code>�R <code>/api/auth/session</code>�R <code>/api/auth/status</code>�R <code>/api/auth/bootstrap</code>." },
+  footer1: { fr: "OpenProperty · Cartographie du système · généré depuis le code source", ar: "OpenProperty · خر�`طة ا�� ظا�& · �&����}�دة �&�  ا�ش�`فرة ا��&صدر�`ة" },
+  footer2: { fr: "src/server/permissions.ts · src/server/schema.sql · src/server/app.ts", ar: "src/server/permissions.ts · src/server/schema.sql · src/server/app.ts" }
+};
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 3. Sections �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+var SECTIONS = [
+  { id:"overview",  n:"01", title:{ fr:"Vue d'ensemble",        ar:"� ظرة عا�&ة" } },
+  { id:"lifecycle", n:"02", title:{ fr:"Parcours au quotidien", ar:"�&سار ا�ع�&� ا��`���&�`" } },
+  { id:"data",      n:"03", title:{ fr:"Comment les éléments sont liés", ar:"ْ�`ف ترتبط ا�ع� اصر ببعض�!ا" } },
+  { id:"roles",     n:"04", title:{ fr:"Qui peut faire quoi",  ar:"�&�  �`ستط�`ع فع� �&اذا" } },
+  { id:"request",   n:"05", title:{ fr:"Chemin d'une action",   ar:"�&سار ا�إجراء" } },
+  { id:"reference", n:"06", title:{ fr:"Aide rapide",          ar:"�&ساعدة سر�`عة" } }
+];
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 4. Lifecycle stages �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+var BANDS = {
+  locatif: { fr:"Suivre un dossier", ar:"�&تابعة ا��&�ف" },
+  ops:     { fr:"Au quotidien",     ar:"�`���&�`ا�9" },
+  admin:   { fr:"Paramétrage",     ar:"ضبط" }
+};
+
+var STAGES = [
+  {
+    n:"01", color:"emerald", band:"locatif",
+    title:{ fr:"Ajouter un bien", ar:"إضافة ع�ار" },
+    sub:{ fr:"Bien et unités", ar:"ع�ار ����حدات" },
+    tables:[],
+    desc:{
+      fr:"Créez le bien avec son adresse. Ajoutez ensuite les unités à louer (nom, chambres, salles de bain, loyer souhaité).",
+      ar:"أضف ا�ع�ار �&ع ع� ��ا� �!�R ث�& أضف ا���حدات ا��اب�ة ��تأج�`ر (ا�اس�&�R ا�غرف�R ا�ح�&ا�&ات�R ا�إ�`جار ا��&ط���ب)."
+    },
+    rule:{
+      fr:"L'état de chaque unité se met à jour seul au fur et à mesure.",
+      ar:"تُحد�}�ث حا�ة ْ� ��حدة ت��ائ�`ا�9 �&ع س�`ر ا�ع�&�."
+    },
+    access:"all"
+  },
+  {
+    n:"02", color:"sky", band:"locatif",
+    title:{ fr:"Enregistrer une demande", ar:"تسج�`� ط�ب" },
+    sub:{ fr:"Demande de location", ar:"ط�ب استئجار" },
+    tables:[],
+    desc:{
+      fr:"Notez les demandes reçues avec les informations de la personne et le bien/unité visé.",
+      ar:"سج�� ا�ط�بات ا���اردة �&ع �&ع����&ات ا�شخص ��ا���حدة ا��&ط���بة."
+    },
+    rule:{
+      fr:"Tout se fait depuis l'application, sans portail public.",
+      ar:"ْ� ش�`ء �`ت�& داخ� ا�تطب�`��R د���  ب��ابة عا�&ة."
+    },
+    access:"all"
+  },
+  {
+    n:"03", color:"blue", band:"locatif",
+    title:{ fr:"Créer le dossier locataire", ar:"إ� شاء �&�ف ا��&ستأجر" },
+    sub:{ fr:"Coordonnées et infos", ar:"ب�`ا� ات ا�اتصا� ���&ع����&ات" },
+    tables:[],
+    desc:{
+      fr:"Ajoutez le locataire avec ses coordonnées, employeur, revenus et contact à appeler en cas d'urgence.",
+      ar:"أضف ا��&ستأجر �&ع ب�`ا� ات�! ��ج�!ة ا�ع�&� ��ا�دخ� �� ج�!ة اتصا� ا�ط��ارئ."
+    },
+    rule:{
+      fr:"Un même locataire peut être lié à plusieurs unités au fil du temps.",
+      ar:"�`�&ْ�  ربط � فس ا��&ستأجر بعدة ��حدات �&ع �&ر��ر ا����ت."
+    },
+    access:"all"
+  },
+  {
+    n:"04", color:"violet", band:"locatif",
+    title:{ fr:"Signer le bail", ar:"ع�د ا�إ�`جار" },
+    sub:{ fr:"Lier unité et locataire", ar:"ربط ا���حدة با��&ستأجر" },
+    tables:[],
+    desc:{
+      fr:"Fixez la période, le loyer, la caution, la date d'échéance et la pénalité de retard.",
+      ar:"حدد ا��&دة ��ا�إ�`جار ��ا�تأ�&�`�  ���`���& ا�استح�ا� ��غرا�&ة ا�تأخ�`ر."
+    },
+    rule:{
+      fr:"Si l'unité est déjà prise pour cette période, le système refuse l'ajout.",
+      ar:"إذا ْا� ت ا���حدة �&شغ���ة خ�ا� �!ذ�! ا�فترة�R �`رفض ا�� ظا�& ا�إضافة."
+    },
+    access:"all"
+  },
+  {
+    n:"05", color:"amber", band:"locatif",
+    title:{ fr:"Générer les loyers", ar:"إ� شاء ف��ات�`ر ا�إ�`جار" },
+    sub:{ fr:"Un clic par mois", ar:"ب� �رة ��احدة �ْ� ش�!ر" },
+    tables:[],
+    desc:{
+      fr:"Générez les charges du mois pour tous les baux en cours en un seul clic.",
+      ar:"أ� شئ ف��ات�`ر ا�ش�!ر �ج�&�`ع ا�ع���د ا�سار�`ة ب� �رة ��احدة."
+    },
+    rule:{
+      fr:"Si elles existent déjà, rien n'est dupliqué.",
+      ar:"إذا ْا� ت �&��ج��دة با�فع��R �ا �`ت�& تْرار�!ا."
+    },
+    access:"all"
+  },
+  {
+    n:"06", color:"teal", band:"locatif",
+    title:{ fr:"Enregistrer les paiements", ar:"تسج�`� ا��&دف��عات" },
+    sub:{ fr:"Suivi des soldes", ar:"�&تابعة ا�أرصدة" },
+    tables:[],
+    desc:{
+      fr:"Saisissez le montant reçu, la date, le mode et la référence. Le solde se met à jour tout seul.",
+      ar:"أدخ� ا��&ب�غ ا��&ست��& ��ا�تار�`خ ��طر�`�ة ا�دفع ��ا��&رجع. �`تحد�ث ا�رص�`د ت��ائ�`ا�9."
+    },
+    rule:{
+      fr:"Les paiements et certains ajustements ne sont accessibles qu'aux personnes autorisées.",
+      ar:"ا��&دف��عات ��بعض ا�تعد�`�ات �&تاحة ف�ط ��أشخاص ا��&خ�����`� ."
+    },
+    access:"all"
+  },
+  {
+    n:"07", color:"orange", band:"ops",
+    title:{ fr:"Suivre la maintenance", ar:"�&تابعة ا�ص�`ا� ة" },
+    sub:{ fr:"Interventions et prestataires", ar:"ا�أع�&ا� ��ا��&��رد�`� " },
+    tables:[],
+    desc:{
+      fr:"Créez une demande d'intervention, attribuez-la à un prestataire, suivez son avancement jusqu'à clôture.",
+      ar:"أ� شئ ط�ب ص�`ا� ة�R ��أس� ِد�! إ��0 أحد ا��&��رد�`� �R ��تتب�ع حا�ت�! حت�0 إغ�ا��!."
+    },
+    rule:{
+      fr:"Quand l'intervention est terminée, la date de clôture est enregistrée automatiquement.",
+      ar:"ع� د إت�&ا�& ا�إص�اح�R �`ُسج�� تار�`خ ا�إغ�ا� ت��ائ�`ا�9."
+    },
+    access:"all"
+  },
+  {
+    n:"08", color:"slate", band:"admin",
+    title:{ fr:"Gérer et suivre", ar:"ا�إدارة ��ا��&تابعة" },
+    sub:{ fr:"Comptes, réglages, historique", ar:"ا�حسابات�R ا�إعدادات�R ا�سج�" },
+    tables:[],
+    desc:{
+      fr:"Gérez les utilisateurs, les réglages par défaut, consultez l'historique et exportez des listes si besoin.",
+      ar:"أدِر ا��&ستخد�&�`�  ��ا�إعدادات ا�افتراض�`ة�R ��اط��ع ع��0 ا�سج��R ��صدِ�ر ا����ائ�& ع� د ا�حاجة."
+    },
+    rule:{
+      fr:"Certaines actions sont réservées à ceux qui en ont le droit.",
+      ar:"بعض ا�إجراءات �&خصصة ف�ط ��&�  ��! ص�اح�`ة."
+    },
+    access:"admin"
+  }
+];
+
+var COLOR = {
+  emerald:{c:"#059669", soft:"#e8f7f0", line:"#c6ecdb"},
+  sky:    {c:"#0284c7", soft:"#e6f3fa", line:"#c8e4f3"},
+  blue:   {c:"#2563eb", soft:"#eaf0fd", line:"#cfdcfa"},
+  violet: {c:"#7c3aed", soft:"#f2eafd", line:"#e0d0f6"},
+  amber:  {c:"#d97706", soft:"#fdf4e3", line:"#f3e3c0"},
+  teal:   {c:"#0d9488", soft:"#e6f6f4", line:"#c5e9e5"},
+  orange: {c:"#ea580c", soft:"#fdeee6", line:"#f7d8c5"},
+  slate:  {c:"#475569", soft:"#eef1f5", line:"#dbe1e9"}
+};
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 5. Roles + capabilities �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+var ROLES = [
+  {
+    key:"manager", rank:"01", color:"blue",
+    name:{ fr:"Manager", ar:"�&د�`ر ا�ع�&��`ات" },
+    scope:{ fr:"Toute l'exploitation quotidienne.", ar:"ْا�&� ا�تشغ�`� ا��`���&�`." },
+    can:{
+      fr:["Biens et unités","Locataires et baux","Charges et paiements","Maintenance et fournisseurs","Exports locataires / biens"],
+      ar:["ا�ع�ارات ��ا���حدات","ا��&ستأجر���  ��ا�ع���د","ا�ف��ات�`ر ��ا�دفعات","ا�ص�`ا� ة ��ا��&��رد��� ","تصد�`ر ا��&ستأجر�`� /ا�ع�ارات"]
+    },
+    cant:{
+      fr:["Paramètres du loyer","Utilisateurs et audit","Supprimer un paiement","�0diter montant / échéance d'une charge","Grand livre en CSV"],
+      ar:["إعدادات ا�إ�`جار","ا��&ستخد�&���  ��ا�تد��`�","حذف دفعة","تعد�`� �&ب�غ/استح�ا� فات��رة","تصد�`ر دفتر ا�إ�`جار CSV"]
+    },
+    coverage:["on","on","on","on","on","on","on","part"],
+    groups:{ "Administration":"n", "Utilisateurs":"n", "Audit & export":"n", "Finances":"n" }
+  },
+  {
+    key:"admin", rank:"02", color:"violet",
+    name:{ fr:"Admin", ar:"ا��&سؤ���" },
+    scope:{ fr:"Manager + couche administrative et finances sensibles.", ar:"�&د�`ر ا�ع�&��`ات + ا�طب�ة ا�إدار�`ة ��ا��&ا��`ة ا�حساسة." },
+    can:{
+      fr:["Tout le plan Manager","Paramètres et réconciliation","Comptes (hors Owner)","Audit et grand livre CSV","�0ditions sensibles et exonérations"],
+      ar:["ْا�&� �&ست���0 �&د�`ر ا�ع�&��`ات","ا�إعدادات ���&طاب�ة ا�إشغا�","ا�حسابات (عدا ا��&ا�ْ)","ا�تد��`� ��تصد�`ر دفتر ا�إ�`جار","ا�تعد�`�ات ا�حساسة ��ا�إعفاءات"]
+    },
+    cant:{
+      fr:["Créer ou modifier un compte Owner","Attribuer le rôle Owner","Supprimer un utilisateur"],
+      ar:["إ� شاء أ�� تعد�`� حساب �&ا�ْ","�&� ح د��ر ا��&ا�ْ","حذف �&ستخد�&"]
+    },
+    coverage:["on","on","on","on","on","on","on","on"],
+    groups:{ "Administration":"y", "Utilisateurs":"y", "Audit & export":"y", "Finances":"y" }
+  },
+  {
+    key:"owner", rank:"03", color:"amber",
+    name:{ fr:"Owner", ar:"ا��&ا�ْ" },
+    scope:{ fr:"Admin + posture principale : contrôle des comptes et des rôles.", ar:"ا��&سؤ��� + ا�ص�اح�`ة ا�ع��`ا: ا�تحْ�& ف�` ا�حسابات ��ا�أد��ار." },
+    can:{
+      fr:["Tout le plan Admin","Supprimer un utilisateur","Créer / modifier un compte Owner","Attribuer le rôle Owner"],
+      ar:["ْا�&� �&ست���0 ا��&سؤ���","حذف �&ستخد�&","إ� شاء/تعد�`� حساب �&ا�ْ","�&� ح د��ر ا��&ا�ْ"]
+    },
+    cant:{
+      fr:["Supprimer son propre compte","�"],
+      ar:["حذف حساب�! ا�شخص�`","�"]
+    },
+    coverage:["on","on","on","on","on","on","on","on"],
+    groups:{ "Administration":"y", "Utilisateurs":"y", "Audit & export":"y", "Finances":"y" }
+  }
+];
+
+var CAP_GROUPS = [
+  {
+    name:{ fr:"Administration", ar:"ا�إدارة" },
+    caps:[
+      { id:"settings:update", label:{ fr:"Modifier les paramètres", ar:"تعد�`� ا�إعدادات" } },
+      { id:"reconcile:manage", label:{ fr:"Réconcilier l'occupation", ar:"�&طاب�ة ا�إشغا�" } }
+    ]
+  },
+  {
+    name:{ fr:"Utilisateurs", ar:"ا��&ستخد�&��� " },
+    caps:[
+      { id:"users:read",  label:{ fr:"Consulter", ar:"عرض" } },
+      { id:"users:create",label:{ fr:"Créer", ar:"إ� شاء" } },
+      { id:"users:update",label:{ fr:"Modifier", ar:"تعد�`�" } },
+      { id:"users:assign",label:{ fr:"Attribuer un rôle", ar:"�&� ح د��ر" } },
+      { id:"users:assign-owner", label:{ fr:"Attribuer le rôle Owner", ar:"�&� ح د��ر ا��&ا�ْ" } },
+      { id:"users:delete",label:{ fr:"Supprimer", ar:"حذف" } }
+    ]
+  },
+  {
+    name:{ fr:"Audit & export", ar:"ا�تد��`� ��ا�تصد�`ر" },
+    caps:[
+      { id:"audit:read", label:{ fr:"Lire le journal d'audit", ar:"�راءة سج� ا�تد��`�" } },
+      { id:"export:rent-ledger", label:{ fr:"Exporter le grand livre", ar:"تصد�`ر دفتر ا�إ�`جار" } }
+    ]
+  },
+  {
+    name:{ fr:"Finances", ar:"ا��&ا��`ة" },
+    caps:[
+      { id:"rent-charges:update-sensitive", label:{ fr:"�0diter montant / échéance / statut", ar:"تعد�`� ا��&ب�غ/ا�استح�ا�/ا�حا�ة" } },
+      { id:"rent-charges:waive", label:{ fr:"Exonérer une charge", ar:"إعفاء فات��رة" } },
+      { id:"payments:delete", label:{ fr:"Supprimer un paiement", ar:"حذف دفعة" } }
+    ]
+  }
+];
+
+/* Grants � mirror of src/server/permissions.ts */
+var GRANTS = {
+  manager: [],
+  admin: [
+    "settings:update","reconcile:manage","users:read","users:create","users:update",
+    "users:assign","audit:read","export:rent-ledger","rent-charges:update-sensitive",
+    "rent-charges:waive","payments:delete"
+  ],
+  owner: [
+    "settings:update","reconcile:manage","users:read","users:create","users:update",
+    "users:assign","users:assign-owner","users:delete","audit:read","export:rent-ledger",
+    "rent-charges:update-sensitive","rent-charges:waive","payments:delete"
+  ]
+};
+function has(role, cap) { return GRANTS[role].indexOf(cap) !== -1; }
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 6. Data map �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+var CORE_CHAIN = [
+  { fr:"properties", ar:"properties", tbl:"properties", color:"emerald" },
+  { fr:"units", ar:"units", tbl:"units", color:"sky" },
+  { fr:"leases", ar:"leases", tbl:"leases", color:"violet" },
+  { fr:"rent_charges", ar:"rent_charges", tbl:"rent_charges", color:"amber" },
+  { fr:"payments", ar:"payments", tbl:"payments", color:"teal" }
+];
+
+var ENTITIES = [
+  {
+    name:{ fr:"Propriétés", ar:"ا�ع�ارات" }, tbl:"properties",
+    rels:[
+      { card:"1�N", dir:"out", to:"units", note:{ fr:"clé étrangère, CASCADE", ar:"�&فتاح أج� ب�`�R CASCADE" } }
+    ]
+  },
+  {
+    name:{ fr:"Unités", ar:"ا���حدات" }, tbl:"units",
+    rels:[
+      { card:"N�1", dir:"in", to:"properties", note:{ fr:"appartient à", ar:"ت� ت�&�` إ��0" } },
+      { card:"1�N", dir:"out", to:"leases", note:{ fr:"unit_id", ar:"unit_id" } },
+      { card:"1�N", dir:"out", to:"applications", note:{ fr:"SET NULL", ar:"SET NULL" } }
+    ]
+  },
+  {
+    name:{ fr:"Locataires", ar:"ا��&ستأجر��� " }, tbl:"tenants",
+    rels:[
+      { card:"1�N", dir:"out", to:"leases", note:{ fr:"primary_tenant_id", ar:"primary_tenant_id" } },
+      { card:"N�N", dir:"out", to:"lease_tenants", note:{ fr:"occupants secondaires", ar:"ساْ� ���  إضاف�`��� " } }
+    ]
+  },
+  {
+    name:{ fr:"Baux", ar:"ا�ع���د" }, tbl:"leases",
+    rels:[
+      { card:"N�1", dir:"in", to:"units", note:{ fr:"unité louée", ar:"ا���حدة ا��&ؤج�}�رة" } },
+      { card:"N�1", dir:"in", to:"tenants", note:{ fr:"locataire principal", ar:"ا��&ستأجر ا�رئ�`س�`" } },
+      { card:"1�N", dir:"out", to:"rent_charges", note:{ fr:"une charge par mois", ar:"فات��رة �ْ� ش�!ر" } }
+    ]
+  },
+  {
+    name:{ fr:"Charges", ar:"ا�ف��ات�`ر" }, tbl:"rent_charges",
+    rels:[
+      { card:"N�1", dir:"in", to:"leases", note:{ fr:"UNIQUE(lease_id, period)", ar:"UNIQUE(lease_id, period)" } },
+      { card:"1�N", dir:"out", to:"payments", note:{ fr:"CASCADE", ar:"CASCADE" } }
+    ]
+  },
+  {
+    name:{ fr:"Paiements", ar:"ا�دفعات" }, tbl:"payments",
+    rels:[
+      { card:"N�1", dir:"in", to:"rent_charges", note:{ fr:"charge_id", ar:"charge_id" } }
+    ]
+  },
+  {
+    name:{ fr:"Ordres de travail", ar:"أ��ا�&ر ا�ع�&�" }, tbl:"work_orders",
+    rels:[
+      { card:"N�1", dir:"in", to:"properties", note:{ fr:"SET NULL", ar:"SET NULL" } },
+      { card:"N�1", dir:"in", to:"units", note:{ fr:"SET NULL", ar:"SET NULL" } },
+      { card:"N�1", dir:"in", to:"vendors", note:{ fr:"SET NULL", ar:"SET NULL" } }
+    ]
+  },
+  {
+    name:{ fr:"Fournisseurs", ar:"ا��&��رد��� " }, tbl:"vendors",
+    rels:[
+      { card:"1�N", dir:"out", to:"work_orders", note:{ fr:"interventions", ar:"ا�تدخ�ات" } }
+    ]
+  },
+  {
+    name:{ fr:"Candidatures", ar:"ا�ط�بات" }, tbl:"applications",
+    rels:[
+      { card:"N�1", dir:"in", to:"units", note:{ fr:"unité visée", ar:"ا���حدة ا��&ط���بة" } }
+    ]
+  },
+  {
+    name:{ fr:"Utilisateurs", ar:"ا��&ستخد�&��� " }, tbl:"users",
+    rels:[
+      { card:"1�N", dir:"out", to:"sessions", note:{ fr:"jetons hachés", ar:"ر�&��ز �&ُشف�}�رة" } },
+      { card:"1�N", dir:"out", to:"audit_logs", note:{ fr:"actor_user_id", ar:"actor_user_id" } }
+    ]
+  },
+  {
+    name:{ fr:"Paramètres", ar:"ا�إعدادات" }, tbl:"settings",
+    rels:[
+      { card:"K/V", dir:"out", to:"AUTH_ENABLED, locale, currency⬦", note:{ fr:"clé primaire texte", ar:"�&فتاح � ص�` أساس�`" } }
+    ]
+  }
+];
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 7. Request pipeline �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+var STEPS = [
+  {
+    n:"1", title:{ fr:"Requête HTTP", ar:"ط�ب HTTP" },
+    text:{ fr:"Le client appelle <code>/api/*</code>. Vite proxifie vers le Worker en développement.", ar:"�`ستدع�` ا�ع�&�`� <code>/api/*</code>. �`��ج��! Vite ا�ط�ب إ��0 ا�٬ Worker أث� اء ا�تط���`ر." }
+  },
+  {
+    n:"2", title:{ fr:"Initialisation D1", ar:"ت�!�`ئة D1" },
+    text:{ fr:"<code>initDB(env)</code> attache le binding <code>DB</code> � même code en local et en production.", ar:"<code>initDB(env)</code> �`ربط <code>DB</code> � � فس ا�ش�`فرة �&ح��`ا�9 ��ف�` ا�إ� تاج." }
+  },
+  {
+    n:"3", title:{ fr:"Valeurs par défaut", ar:"ا���`�& ا�افتراض�`ة" },
+    text:{ fr:"<code>ensureSeeded()</code> écrit les réglages manquants une seule fois, sans jamais écraser.", ar:"<code>ensureSeeded()</code> �`ْتب ا�إعدادات ا�� ا�صة �&رة ��احدة د���  تجا��ز ا��&��ج��د." }
+  },
+  {
+    n:"4", title:{ fr:"Authentification", ar:"ا��&صاد�ة" },
+    text:{ fr:"Cookie <code>session_token</code> · TTL 7 jours · jeton haché SHA-256 · mot de passe PBKDF2 (100k).", ar:"ْ��ْ�` <code>session_token</code> · ص�اح�`ة 7 أ�`ا�& · ر�&ز �&ُشف�}�ر SHA-256 · ْ��&ة ا��&ر��ر PBKDF2 (100k)." }
+  },
+  {
+    n:"5", title:{ fr:"Garde de permission", ar:"ب��ابة ا�ص�اح�`ة" },
+    text:{ fr:"La capacité requise est vérifiée côté serveur. Refus �  <code>403</code>, absence de session �  <code>401</code>.", ar:"تُتح��}�� ا�ص�اح�`ة ع��0 ا�خاد�&. ا�رفض � � <code>403</code>�R غ�`اب ا�ج�سة � � <code>401</code>." }
+  },
+  {
+    n:"6", title:{ fr:"Traitement", ar:"ا��&عا�جة" },
+    text:{ fr:"Validation <code>zod</code> puis requêtes SQL préparées sur D1. Règles métier : chevauchement de bail, recalcul de statut.", ar:"تح��� <code>zod</code> ث�& استع�ا�&ات SQL �&ُ�!�`�}�أة ع��0 D1. ���اعد ا�ع�&�: ت�اطع ا�ع���د�R إعادة حساب ا�حا�ة." }
+  },
+  {
+    n:"7", title:{ fr:"Journal d'audit", ar:"سج� ا�تد��`�" },
+    text:{ fr:"<code>writeAudit()</code> enregistre les mutations sensibles en meilleur effort � un échec n'annule pas l'opération.", ar:"<code>writeAudit()</code> �`سج�� ا�ع�&��`ات ا�حساسة بأفض� ج�!د � فش��! �ا �`ُ�غ�` ا�ع�&��`ة." }
+  },
+  {
+    n:"8", title:{ fr:"Réponse JSON", ar:"استجابة JSON" },
+    text:{ fr:"Code HTTP + corps JSON. Toute réponse <code>401</code> renvoie l'interface vers <code>/login</code>.", ar:"ر�&ز HTTP + جس�& JSON. أ�` استجابة <code>401</code> تُع�`د ا���اج�!ة إ��0 <code>/login</code>." }
+  }
+];
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 8. Reference �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+var STATUS_SETS = [
+  { title:{ fr:"Unité", ar:"ا���حدة" }, cls:"", items:["vacant","occupied","turnover","unavailable"] },
+  { title:{ fr:"Bail", ar:"ا�ع�د" }, cls:"", items:["upcoming","active","ended","cancelled"] },
+  { title:{ fr:"Charge de loyer", ar:"فات��رة ا�إ�`جار" }, cls:"money", items:["open","partial","paid","overdue","waived"] },
+  { title:{ fr:"Ordre de travail", ar:"أ�&ر ا�ع�&�" }, cls:"warn", items:["open","assigned","in_progress","completed","cancelled"] },
+  { title:{ fr:"Candidature", ar:"ا�ط�ب" }, cls:"", items:["new","screening","approved","declined","withdrawn"] },
+  { title:{ fr:"Priorité", ar:"ا�أ������`ة" }, cls:"danger", items:["low","normal","high","urgent"] },
+  { title:{ fr:"Moyen de paiement", ar:"طر�`�ة ا�دفع" }, cls:"", items:["cash","check","ach","credit","other"] },
+  { title:{ fr:"Type de bien", ar:"� ��ع ا�ع�ار" }, cls:"", items:["single_family","multi_family","condo","townhouse","commercial"] }
+];
+
+var ROUTE_GROUPS = [
+  { name:"auth", items:[["p","POST","/login"],["p","POST","/logout"],["g","GET","/session"],["p","POST","/bootstrap"],["g","GET","/status"]] },
+  { name:"properties", items:[["g","GET","/"],["g","GET","/:id"],["p","POST","/"],["u","PUT","/:id"],["d","DELETE","/:id"]] },
+  { name:"units", items:[["g","GET","/"],["g","GET","/:id"],["p","POST","/"],["u","PUT","/:id"],["d","DELETE","/:id"]] },
+  { name:"tenants", items:[["g","GET","/"],["g","GET","/:id"],["p","POST","/"],["u","PUT","/:id"],["d","DELETE","/:id"]] },
+  { name:"leases", items:[["g","GET","/"],["g","GET","/:id"],["p","POST","/"],["u","PUT","/:id"],["d","DELETE","/:id"]] },
+  { name:"rent-charges", items:[["g","GET","/"],["p","POST","/"],["p","POST","/generate"],["u","PUT","/:id"],["d","DELETE","/:id"],["g","GET","/:id/payments"]] },
+  { name:"payments", items:[["p","POST","/"],["d","DELETE","/:id"]] },
+  { name:"vendors", items:[["g","GET","/"],["p","POST","/"],["u","PUT","/:id"],["d","DELETE","/:id"]] },
+  { name:"work-orders", items:[["g","GET","/"],["p","POST","/"],["u","PUT","/:id"],["d","DELETE","/:id"]] },
+  { name:"applications", items:[["g","GET","/"],["p","POST","/"],["u","PUT","/:id"],["d","DELETE","/:id"]] },
+  { name:"admin", items:[["g","GET","/dashboard/summary"],["g","GET","/settings"],["u","PUT","/settings"],["p","POST","/admin/reconcile-occupancy"],["g","GET","/users"],["p","POST","/users"],["u","PUT","/users/:id"],["d","DELETE","/users/:id"],["g","GET","/audit"]] },
+  { name:"export", items:[["g","GET","/export/rent-ledger"],["g","GET","/export/tenants"],["g","GET","/export/properties"]] }
+];
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 9. Renderers �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+function esc(s) { return String(s); }
+
+function secHead(sec) {
+  return '<div class="sec__head">' +
+    '<span class="sec__num">' + sec.n + '</span>' +
+    '<div><h2 class="sec__title">' + t(sec.title) + '</h2>' +
+    '<p class="sec__sub">' + t(sec.title) + '</p></div>' +
+  '</div>';
+}
+
+/* � Hero � */
+function renderHero() {
+  var legend = [
+    '<span class="pill"><b>3</b> ' + t({fr:"rôles",ar:"أد��ار"}) + '</span>',
+    '<span class="pill"><b>14</b> ' + t({fr:"tables",ar:"جد���ا�9"}) + '</span>',
+    '<span class="pill"><b>58</b> ' + t({fr:"routes API",ar:"�&سار API"}) + '</span>',
+    '<span class="pill"><b>8</b> ' + t({fr:"étapes",ar:"�&راح�"}) + '</span>',
+    '<span class="pill"><b>13</b> ' + t({fr:"capacités",ar:"ص�اح�`ة"}) + '</span>'
+  ].join("");
+  return '<div class="hero">' +
+    '<div class="hero__eyebrow">' + t(UI.heroEyebrow) + '</div>' +
+    '<h1>' + t(UI.heroTitle) + '</h1>' +
+    '<p>' + t(UI.heroText) + '</p>' +
+    '<div class="hero__meta">' + legend + '</div>' +
+  '</div>';
+}
+
+/* � Overview � */
+function renderOverview() {
+  var stats = [
+    { n:"3", fr:"rôles hiérarchiques", ar:"أد��ار �!ر�&�`ة", s:{fr:"manager �  admin �  owner", ar:"�&د�`ر �  �&سؤ��� �  �&ا�ْ"} },
+    { n:"8", fr:"étapes de cycle", ar:"�&راح� ا�د��رة", s:{fr:"du bien à l'audit", ar:"�&�  ا�ع�ار إ��0 ا�تد��`�"} },
+    { n:"13", fr:"capacités restreintes", ar:"ص�اح�`ة �&��`�}�دة", s:{fr:"au-delà du plan de base", ar:"ف��� ا��&ست���0 ا�أساس�`"} },
+    { n:"1", fr:"source d'autorisation", ar:"�&صدر ��ص�اح�`ات", s:{fr:"permissions.ts, côté serveur", ar:"permissions.ts ع��0 ا�خاد�&"} }
+  ].map(function (s) {
+    return '<div class="stat"><div class="stat__n">' + s.n + '</div>' +
+      '<div class="stat__l">' + t({fr:s.fr,ar:s.ar}) + '<span>' + t(s.s) + '</span></div></div>';
+  }).join("");
+
+  var notes = [
+    { b:{fr:"Un seul endroit", ar:"� سخة ��احدة"}, x:{fr:"Toutes les données appartiennent à une seule organisation. Aucune portée par enregistrement : la portée est globale.", ar:"ْ� ا�ب�`ا� ات ��&ؤسسة ��احدة. �ا �`��جد � طا� �ْ� سج�: ا�� طا� شا�&�."} },
+    { b:{fr:"Clair et direct", ar:"D1 أص��`"}, x:{fr:"SQLite managé par Cloudflare. Le même schéma et le même code tournent en local et en production.", ar:"SQLite �&ُدار ب��اسطة Cloudflare. � فس ا��&خطط ��ا�ش�`فرة �`ع�&�ا�  �&ح��`ا�9 ��ف�` ا�إ� تاج."} },
+    { b:{fr:"Occupance dérivée", ar:"ا�إشغا� �&ُست� تج"}, x:{fr:"Le statut d'une unité est toujours recalculé depuis les baux, jamais saisi librement.", ar:"حا�ة ا���حدة تُحسب دائ�&ا�9 �&�  ا�ع���د�R ���ا تُدخ�}� بحر�`ة."} }
+  ].map(function (n) {
+    return '<div class="note"><span class="note__i">i</span><div><b>' + t(n.b) + '</b> � ' + t(n.x) + '</div></div>';
+  }).join("");
+
+  return '<section class="sec" id="overview">' + secHead(SECTIONS[0]) +
+    renderHero() +
+    '<div class="stats">' + stats + '</div>' +
+    '<div class="notes" style="margin-top:16px">' + notes + '</div>' +
+  '</section>';
+}
+
+/* � Lifecycle � */
+function stageCard(s, idx) {
+  var c = COLOR[s.color] || COLOR.slate;
+  var band = s.band;
+  var prevBand = idx > 0 ? STAGES[idx-1].band : null;
+  var bandHtml = (band !== prevBand)
+    ? '<div class="band"><span class="band__tag">' + t(BANDS[band]) + '</span></div>'
+    : "";
+
+  var accessMap = {
+    all:   { cls:"access--all",   fr:"Les 3 rôles",      ar:"ا�أد��ار ا�ث�اثة" },
+    admin: { cls:"access--admin", fr:"Admin + Owner",    ar:"ا��&سؤ��� + ا��&ا�ْ" }
+  };
+  var a = accessMap[s.access];
+
+  var ruleIcon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 9v4"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>';
+
+  return bandHtml +
+    '<div class="stage">' +
+      '<div class="stage__rail">' +
+        '<div class="stage__num" style="--c:' + c.c + ';--c-soft:' + c.soft + ';--c-line:' + c.line + '">' + s.n + '</div>' +
+        '<div class="stage__line" style="--c-line:' + c.line + '"></div>' +
+      '</div>' +
+      '<div class="stage__card" style="--c:' + c.c + '">' +
+        '<div class="stage__top">' +
+          '<span class="stage__name">' + t(s.title) + '</span>' +
+          '<span class="stage__sub">· ' + t(s.sub) + '</span>' +
+          '<span class="stage__tables">' + s.tables.map(function (tb) {
+            return '<span class="tbl">' + tb + '</span>';
+          }).join("") + '</span>' +
+        '</div>' +
+        '<p class="stage__desc">' + t(s.desc) + '</p>' +
+        '<div class="stage__rule" style="--c:' + c.c + '">' + ruleIcon + '<span>' + t(s.rule) + '</span></div>' +
+        '<div class="stage__foot">' +
+          '<span class="access ' + a.cls + '"><span class="dot"></span>' + t({fr:a.fr,ar:a.ar}) + '</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+}
+
+function renderLifecycle() {
+  return '<section class="sec" id="lifecycle">' + secHead(SECTIONS[1]) +
+    '<p style="font-size:13px;color:var(--muted);margin-bottom:20px">' +
+      t({fr:"Huit étapes séquentielles. Chaque étape alimente la suivante ; l'administration ferme la boucle.", ar:"ث�&ا� �` �&راح� �&تس�س�ة. ْ� �&رح�ة تُغذ�` ا�تا��`ة�R ��ا�إدارة تُغ�� ا�ح��ة."}) +
+    '</p>' +
+    '<div class="stages">' + STAGES.map(stageCard).join("") + '</div>' +
+  '</section>';
+}
+
+/* � Data map � */
+function renderData() {
+  var chain = CORE_CHAIN.map(function (n, i) {
+    var c = COLOR[n.color];
+    var node = '<div class="chain__node" style="--c:' + c.c + '"><b>' + n.tbl + '</b><span>' + t({fr:"table",ar:"جد���"}) + '</span></div>';
+    return (i ? '<div class="chain__sep">��</div>' : "") + node;
+  }).join("");
+
+  var cards = ENTITIES.map(function (e) {
+    var rels = e.rels.map(function (r) {
+      return '<div class="rel">' +
+        '<span class="rel__card ' + (r.card.indexOf("N") === 0 ? "many" : (r.card === "1�N" ? "one" : "")) + '">' + r.card + '</span>' +
+        '<code>' + r.to + '</code>' +
+        '<span style="color:var(--muted)">· ' + t(r.note) + '</span>' +
+      '</div>';
+    }).join("");
+    return '<div class="ent">' +
+      '<div class="ent__head"><span class="ent__name">' + t(e.name) + '</span><span class="ent__tbl">' + e.tbl + '</span></div>' +
+      '<div class="ent__rel">' + rels + '</div>' +
+    '</div>';
+  }).join("");
+
+  return '<section class="sec" id="data">' + secHead(SECTIONS[2]) +
+    '<div class="band"><span class="band__tag">' + t({fr:"Chaîne principale", ar:"ا�س�س�ة ا�أساس�`ة"}) + '</span></div>' +
+    '<div class="chain">' + chain + '</div>' +
+    '<div class="band"><span class="band__tag">' + t(UI.links) + '</span></div>' +
+    '<div class="entities">' + cards + '</div>' +
+  '</section>';
+}
+
+/* � Roles � */
+function roleCard(r, i) {
+  var c = COLOR[r.color];
+  var can = r.can[LANG].filter(function (x) { return x !== "�"; }).map(function (x) {
+    return '<span class="chip yes">' + x + '</span>';
+  }).join("");
+  var cant = r.cant[LANG].filter(function (x) { return x !== "�"; }).map(function (x) {
+    return '<span class="chip no">' + x + '</span>';
+  }).join("");
+  var dots = r.coverage.map(function (v, k) {
+    return '<i class="' + (v === "on" ? "on" : (v === "part" ? "part" : "")) + '">' + (k+1) + '</i>';
+  }).join("");
+
+  return '<div class="role" data-role="' + r.key + '" data-focus="false" style="--c:' + c.c + ';--c-soft:' + c.soft + ';--c-line:' + c.line + '" tabindex="0" role="button">' +
+    '<div class="role__in">' +
+      '<div class="role__id">' +
+        '<span class="role__rank">' + t({fr:"NIVEAU",ar:"ا��&ست���0"}) + ' ' + r.rank + '</span>' +
+        '<span class="role__name">' + t(r.name) + '</span>' +
+        '<span class="role__key">' + r.key + '</span>' +
+        '<span class="role__scope">' + t(r.scope) + '</span>' +
+      '</div>' +
+      '<div class="role__body">' +
+        '<div class="role__col"><h4>' + t(UI.can) + '</h4><div class="chips">' + can + '</div>' +
+          '<div class="coverage">' + dots + '<span class="coverage__lbl">' + t(UI.coverage) + '</span></div>' +
+        '</div>' +
+        '<div class="role__col"><h4>' + t(UI.cant) + '</h4><div class="chips">' + (cant || '<span class="chip">�</span>') + '</div></div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderMatrix() {
+  var head = '<tr><th>' + t({fr:"Capacité", ar:"ا�ص�اح�`ة"}) + '</th>' +
+    ROLES.map(function (r) {
+      return '<th class="col-' + r.key + '">' + t(r.name) + '</th>';
+    }).join("") + '</tr>';
+
+  var body = CAP_GROUPS.map(function (g) {
+    var rows = g.caps.map(function (cap) {
+      var cells = ROLES.map(function (r) {
+        var ok = has(r.key, cap.id);
+        return '<td class="col-' + r.key + '"><span class="mark ' + (ok ? "y" : "n") + '" title="' + (ok ? t(UI.legendYes) : t(UI.legendNo)) + '">' + (ok ? "�S" : "�S") + '</span></td>';
+      }).join("");
+      return '<tr><td><div class="cap"><code>' + cap.id + '</code><em>' + t(cap.label) + '</em></div></td>' + cells + '</tr>';
+    }).join("");
+    return '<tr class="grp"><td colspan="4">' + t(g.name) + '</td></tr>' + rows;
+  }).join("");
+
+  return '<div class="matrix-wrap">' +
+    '<div class="matrix-hd">' +
+      '<div><h3>' + t(UI.matrixTitle) + '</h3><p>' + t(UI.matrixSub) + '</p></div>' +
+      '<div class="legend">' +
+        '<span><b style="color:var(--ok)">�S</b>' + t(UI.legendYes) + '</span>' +
+        '<span><b style="color:var(--no)">�S</b>' + t(UI.legendNo) + '</span>' +
+      '</div>' +
+    '</div>' +
+    '<table class="matrix" id="matrix"><thead>' + head + '</thead><tbody>' + body + '</tbody></table>' +
+  '</div>';
+}
+
+function renderRoles() {
+  var base = '<div class="note" style="margin-top:14px"><span class="note__i">�0�</span><div>' +
+    '<b>' + t(UI.basePlane) + '</b> � ' + t(UI.basePlaneTxt) + '</div></div>';
+
+  return '<section class="sec" id="roles">' + secHead(SECTIONS[3]) +
+    '<div class="ladder">' + ROLES.map(roleCard).join("") + '</div>' +
+    renderMatrix() + base +
+  '</section>';
+}
+
+/* � Request pipeline � */
+function renderRequest() {
+  var cards = STEPS.map(function (s) {
+    return '<div class="step"><span class="step__n">' + s.n + '</span>' +
+      '<b>' + t(s.title) + '</b><p>' + t(s.text) + '</p></div>';
+  }).join("");
+
+  var pub = '<div class="step step--public" style="grid-column:1/-1">' +
+    '<span class="step__n">!</span><b>' + t({fr:"Exception : routes publiques", ar:"استث� اء: ا��&سارات ا�عا�&ة"}) + '</b>' +
+    '<p>' + t(UI.publicRoutes) + '</p></div>';
+
+  return '<section class="sec" id="request">' + secHead(SECTIONS[4]) +
+    '<div class="pipe">' + cards + pub + '</div>' +
+  '</section>';
+}
+
+/* � Reference � */
+function renderReference() {
+  var sets = STATUS_SETS.map(function (s) {
+    return '<div class="ref"><h4>' + t(s.title) + ' · <span style="font-family:var(--mono);text-transform:none;letter-spacing:0">' + s.items.length + '</span></h4>' +
+      '<div class="st">' + s.items.map(function (x) {
+        return '<span class="' + s.cls + '">' + x + '</span>';
+      }).join("") + '</div></div>';
+  }).join("");
+
+  var groups = ROUTE_GROUPS.map(function (g) {
+    var lis = g.items.map(function (it) {
+      return '<li><b class="' + it[0] + '">' + it[1] + '</b>' + it[2] + '</li>';
+    }).join("");
+    return '<div class="rg"><h5>' + g.name + '</h5><ul>' + lis + '</ul></div>';
+  }).join("");
+
+  return '<section class="sec" id="reference">' + secHead(SECTIONS[5]) +
+    '<div class="band"><span class="band__tag">' + t({fr:"Statuts métier", ar:"حا�ات ا�ع�&�"}) + '</span></div>' +
+    '<div class="refs">' + sets + '</div>' +
+    '<details class="routes"><summary>' + t(UI.routesTitle) + '</summary>' +
+      '<div class="routes__body">' + groups + '</div>' +
+    '</details>' +
+    '<footer><span>' + t(UI.footer1) + '</span><span>' + t(UI.footer2) + '</span></footer>' +
+  '</section>';
+}
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 10. Mount + i18n �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+function renderToc() {
+  return SECTIONS.map(function (s) {
+    return '<a href="#' + s.id + '"><span class="n">' + s.n + '</span><span>' + t(s.title) + '</span></a>';
+  }).join("");
+}
+
+function render() {
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
+
+  document.getElementById("brandSub").textContent = t(UI.brandSub);
+  document.getElementById("printBtn").textContent = t(UI.print);
+  document.getElementById("tocTitle").textContent = t(UI.tocTitle);
+  document.getElementById("tocNav").innerHTML = renderToc();
+
+  document.getElementById("main").innerHTML =
+    renderOverview() + renderLifecycle() + renderData() +
+    renderRoles() + renderRequest() + renderReference();
+
+  Array.prototype.forEach.call(document.querySelectorAll(".lang button"), function (b) {
+    b.setAttribute("aria-pressed", b.dataset.lang === LANG ? "true" : "false");
+  });
+
+  initInteractions();
+}
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 11. Interactions �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+var focusedRole = null;
+
+function initInteractions() {
+  /* role cards �  matrix focus */
+  var matrix = document.getElementById("matrix");
+  Array.prototype.forEach.call(document.querySelectorAll(".role"), function (card) {
+    function toggle() {
+      var role = card.dataset.role;
+      focusedRole = (focusedRole === role) ? null : role;
+      Array.prototype.forEach.call(document.querySelectorAll(".role"), function (c) {
+        c.dataset.focus = (c.dataset.role === focusedRole) ? "true" : "false";
+      });
+      matrix.className = "matrix" + (focusedRole ? " focus-" + focusedRole : "");
+    }
+    card.addEventListener("click", toggle);
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+    });
+  });
+
+  /* scroll spy */
+  var links = Array.prototype.slice.call(document.querySelectorAll("#tocNav a"));
+  var sections = SECTIONS.map(function (s) { return document.getElementById(s.id); }).filter(Boolean);
+  function spy() {
+    var pos = window.scrollY + 120;
+    var current = sections[0];
+    sections.forEach(function (s) { if (s.offsetTop <= pos) current = s; });
+    links.forEach(function (a) {
+      a.classList.toggle("on", a.getAttribute("href") === "#" + current.id);
+    });
+  }
+  spy();
+  window.addEventListener("scroll", spy, { passive: true });
+}
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 12. Boot �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+document.addEventListener("click", function (e) {
+  var b = e.target.closest ? e.target.closest(".lang button") : null;
+  if (!b) return;
+  LANG = b.dataset.lang;
+  try { localStorage.setItem("op-doc-lang", LANG); } catch (err) {}
+  focusedRole = null;
+  render();
+});
+
+document.getElementById("printBtn").addEventListener("click", function () { window.print(); });
+
+render();
+
+})();
+</script>
+</body>
+</html>  notes = [
+    { b:{fr:"Un seul endroit", ar:"مكان واحد"}, x:{fr:"Tout est regroupé : biens, locataires, baux, loyers, paiements et interventions.", ar:"كل شيء في مكان واحد: العقارات، المستأجرون، العقود، الإيجارات، المدفوعات والصيانة."} },
+    { b:{fr:"Clair et direct", ar:"واضح وبسيط"}, x:{fr:"Pas besoin de tout comprendre pour commencer à travailler au quotidien.", ar:"لا حاجة لفهم كل شيء لبدء العمل اليومي."} },
+    { b:{fr:"Toujours à jour", ar:"دائماً محدث"}, x:{fr:"Les soldes et l'état des unités se mettent à jour au fur et à mesure.", ar:"الأرصدة وحالة الوحدات تتحدّث مع كل إجراء."} }
+    ].map(function (s) {
+    return '<div class="stat"><div class="stat__n">' + s.n + '</div>' +
+      '<div class="stat__l">' + t({fr:s.fr,ar:s.ar}) + '<span>' + t(s.s) + '</span></div></div>';
+  }).join("");
+
+  var notes = [
+    { b:{fr:"Un seul endroit", ar:"� سخة ��احدة"}, x:{fr:"Toutes les données appartiennent à une seule organisation. Aucune portée par enregistrement : la portée est globale.", ar:"ْ� ا�ب�`ا� ات ��&ؤسسة ��احدة. �ا �`��جد � طا� �ْ� سج�: ا�� طا� شا�&�."} },
+    { b:{fr:"Clair et direct", ar:"D1 أص��`"}, x:{fr:"SQLite managé par Cloudflare. Le même schéma et le même code tournent en local et en production.", ar:"SQLite �&ُدار ب��اسطة Cloudflare. � فس ا��&خطط ��ا�ش�`فرة �`ع�&�ا�  �&ح��`ا�9 ��ف�` ا�إ� تاج."} },
+    { b:{fr:"Occupance dérivée", ar:"ا�إشغا� �&ُست� تج"}, x:{fr:"Le statut d'une unité est toujours recalculé depuis les baux, jamais saisi librement.", ar:"حا�ة ا���حدة تُحسب دائ�&ا�9 �&�  ا�ع���د�R ���ا تُدخ�}� بحر�`ة."} }
+  ].map(function (n) {
+    return '<div class="note"><span class="note__i">i</span><div><b>' + t(n.b) + '</b> � ' + t(n.x) + '</div></div>';
+  }).join("");
+
+  return '<section class="sec" id="overview">' + secHead(SECTIONS[0]) +
+    renderHero() +
+    '<div class="stats">' + stats + '</div>' +
+    '<div class="notes" style="margin-top:16px">' + notes + '</div>' +
+  '</section>';
+}
+
+/* � Lifecycle � */
+function stageCard(s, idx) {
+  var c = COLOR[s.color] || COLOR.slate;
+  var band = s.band;
+  var prevBand = idx > 0 ? STAGES[idx-1].band : null;
+  var bandHtml = (band !== prevBand)
+    ? '<div class="band"><span class="band__tag">' + t(BANDS[band]) + '</span></div>'
+    : "";
+
+  var accessMap = {
+    all:   { cls:"access--all",   fr:"Les 3 rôles",      ar:"ا�أد��ار ا�ث�اثة" },
+    admin: { cls:"access--admin", fr:"Admin + Owner",    ar:"ا��&سؤ��� + ا��&ا�ْ" }
+  };
+  var a = accessMap[s.access];
+
+  var ruleIcon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 9v4"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>';
+
+  return bandHtml +
+    '<div class="stage">' +
+      '<div class="stage__rail">' +
+        '<div class="stage__num" style="--c:' + c.c + ';--c-soft:' + c.soft + ';--c-line:' + c.line + '">' + s.n + '</div>' +
+        '<div class="stage__line" style="--c-line:' + c.line + '"></div>' +
+      '</div>' +
+      '<div class="stage__card" style="--c:' + c.c + '">' +
+        '<div class="stage__top">' +
+          '<span class="stage__name">' + t(s.title) + '</span>' +
+          '<span class="stage__sub">· ' + t(s.sub) + '</span>' +
+          '<span class="stage__tables">' + s.tables.map(function (tb) {
+            return '<span class="tbl">' + tb + '</span>';
+          }).join("") + '</span>' +
+        '</div>' +
+        '<p class="stage__desc">' + t(s.desc) + '</p>' +
+        '<div class="stage__rule" style="--c:' + c.c + '">' + ruleIcon + '<span>' + t(s.rule) + '</span></div>' +
+        '<div class="stage__foot">' +
+          '<span class="access ' + a.cls + '"><span class="dot"></span>' + t({fr:a.fr,ar:a.ar}) + '</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+}
+
+function renderLifecycle() {
+  return '<section class="sec" id="lifecycle">' + secHead(SECTIONS[1]) +
+    '<p style="font-size:13px;color:var(--muted);margin-bottom:20px">' +
+      t({fr:"Huit étapes séquentielles. Chaque étape alimente la suivante ; l'administration ferme la boucle.", ar:"ث�&ا� �` �&راح� �&تس�س�ة. ْ� �&رح�ة تُغذ�` ا�تا��`ة�R ��ا�إدارة تُغ�� ا�ح��ة."}) +
+    '</p>' +
+    '<div class="stages">' + STAGES.map(stageCard).join("") + '</div>' +
+  '</section>';
+}
+
+/* � Data map � */
+function renderData() {
+  var chain = CORE_CHAIN.map(function (n, i) {
+    var c = COLOR[n.color];
+    var node = '<div class="chain__node" style="--c:' + c.c + '"><b>' + n.tbl + '</b><span>' + t({fr:"table",ar:"جد���"}) + '</span></div>';
+    return (i ? '<div class="chain__sep">��</div>' : "") + node;
+  }).join("");
+
+  var cards = ENTITIES.map(function (e) {
+    var rels = e.rels.map(function (r) {
+      return '<div class="rel">' +
+        '<span class="rel__card ' + (r.card.indexOf("N") === 0 ? "many" : (r.card === "1�N" ? "one" : "")) + '">' + r.card + '</span>' +
+        '<code>' + r.to + '</code>' +
+        '<span style="color:var(--muted)">· ' + t(r.note) + '</span>' +
+      '</div>';
+    }).join("");
+    return '<div class="ent">' +
+      '<div class="ent__head"><span class="ent__name">' + t(e.name) + '</span><span class="ent__tbl">' + e.tbl + '</span></div>' +
+      '<div class="ent__rel">' + rels + '</div>' +
+    '</div>';
+  }).join("");
+
+  return '<section class="sec" id="data">' + secHead(SECTIONS[2]) +
+    '<div class="band"><span class="band__tag">' + t({fr:"Chaîne principale", ar:"ا�س�س�ة ا�أساس�`ة"}) + '</span></div>' +
+    '<div class="chain">' + chain + '</div>' +
+    '<div class="band"><span class="band__tag">' + t(UI.links) + '</span></div>' +
+    '<div class="entities">' + cards + '</div>' +
+  '</section>';
+}
+
+/* � Roles � */
+function roleCard(r, i) {
+  var c = COLOR[r.color];
+  var can = r.can[LANG].filter(function (x) { return x !== "�"; }).map(function (x) {
+    return '<span class="chip yes">' + x + '</span>';
+  }).join("");
+  var cant = r.cant[LANG].filter(function (x) { return x !== "�"; }).map(function (x) {
+    return '<span class="chip no">' + x + '</span>';
+  }).join("");
+  var dots = r.coverage.map(function (v, k) {
+    return '<i class="' + (v === "on" ? "on" : (v === "part" ? "part" : "")) + '">' + (k+1) + '</i>';
+  }).join("");
+
+  return '<div class="role" data-role="' + r.key + '" data-focus="false" style="--c:' + c.c + ';--c-soft:' + c.soft + ';--c-line:' + c.line + '" tabindex="0" role="button">' +
+    '<div class="role__in">' +
+      '<div class="role__id">' +
+        '<span class="role__rank">' + t({fr:"NIVEAU",ar:"ا��&ست���0"}) + ' ' + r.rank + '</span>' +
+        '<span class="role__name">' + t(r.name) + '</span>' +
+        '<span class="role__key">' + r.key + '</span>' +
+        '<span class="role__scope">' + t(r.scope) + '</span>' +
+      '</div>' +
+      '<div class="role__body">' +
+        '<div class="role__col"><h4>' + t(UI.can) + '</h4><div class="chips">' + can + '</div>' +
+          '<div class="coverage">' + dots + '<span class="coverage__lbl">' + t(UI.coverage) + '</span></div>' +
+        '</div>' +
+        '<div class="role__col"><h4>' + t(UI.cant) + '</h4><div class="chips">' + (cant || '<span class="chip">�</span>') + '</div></div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderMatrix() {
+  var head = '<tr><th>' + t({fr:"Capacité", ar:"ا�ص�اح�`ة"}) + '</th>' +
+    ROLES.map(function (r) {
+      return '<th class="col-' + r.key + '">' + t(r.name) + '</th>';
+    }).join("") + '</tr>';
+
+  var body = CAP_GROUPS.map(function (g) {
+    var rows = g.caps.map(function (cap) {
+      var cells = ROLES.map(function (r) {
+        var ok = has(r.key, cap.id);
+        return '<td class="col-' + r.key + '"><span class="mark ' + (ok ? "y" : "n") + '" title="' + (ok ? t(UI.legendYes) : t(UI.legendNo)) + '">' + (ok ? "�S" : "�S") + '</span></td>';
+      }).join("");
+      return '<tr><td><div class="cap"><code>' + cap.id + '</code><em>' + t(cap.label) + '</em></div></td>' + cells + '</tr>';
+    }).join("");
+    return '<tr class="grp"><td colspan="4">' + t(g.name) + '</td></tr>' + rows;
+  }).join("");
+
+  return '<div class="matrix-wrap">' +
+    '<div class="matrix-hd">' +
+      '<div><h3>' + t(UI.matrixTitle) + '</h3><p>' + t(UI.matrixSub) + '</p></div>' +
+      '<div class="legend">' +
+        '<span><b style="color:var(--ok)">�S</b>' + t(UI.legendYes) + '</span>' +
+        '<span><b style="color:var(--no)">�S</b>' + t(UI.legendNo) + '</span>' +
+      '</div>' +
+    '</div>' +
+    '<table class="matrix" id="matrix"><thead>' + head + '</thead><tbody>' + body + '</tbody></table>' +
+  '</div>';
+}
+
+function renderRoles() {
+  var base = '<div class="note" style="margin-top:14px"><span class="note__i">�0�</span><div>' +
+    '<b>' + t(UI.basePlane) + '</b> � ' + t(UI.basePlaneTxt) + '</div></div>';
+
+  return '<section class="sec" id="roles">' + secHead(SECTIONS[3]) +
+    '<div class="ladder">' + ROLES.map(roleCard).join("") + '</div>' +
+    renderMatrix() + base +
+  '</section>';
+}
+
+/* � Request pipeline � */
+function renderRequest() {
+  var cards = STEPS.map(function (s) {
+    return '<div class="step"><span class="step__n">' + s.n + '</span>' +
+      '<b>' + t(s.title) + '</b><p>' + t(s.text) + '</p></div>';
+  }).join("");
+
+  var pub = '<div class="step step--public" style="grid-column:1/-1">' +
+    '<span class="step__n">!</span><b>' + t({fr:"Exception : routes publiques", ar:"استث� اء: ا��&سارات ا�عا�&ة"}) + '</b>' +
+    '<p>' + t(UI.publicRoutes) + '</p></div>';
+
+  return '<section class="sec" id="request">' + secHead(SECTIONS[4]) +
+    '<div class="pipe">' + cards + pub + '</div>' +
+  '</section>';
+}
+
+/* � Reference � */
+function renderReference() {
+  var sets = STATUS_SETS.map(function (s) {
+    return '<div class="ref"><h4>' + t(s.title) + ' · <span style="font-family:var(--mono);text-transform:none;letter-spacing:0">' + s.items.length + '</span></h4>' +
+      '<div class="st">' + s.items.map(function (x) {
+        return '<span class="' + s.cls + '">' + x + '</span>';
+      }).join("") + '</div></div>';
+  }).join("");
+
+  var groups = ROUTE_GROUPS.map(function (g) {
+    var lis = g.items.map(function (it) {
+      return '<li><b class="' + it[0] + '">' + it[1] + '</b>' + it[2] + '</li>';
+    }).join("");
+    return '<div class="rg"><h5>' + g.name + '</h5><ul>' + lis + '</ul></div>';
+  }).join("");
+
+  return '<section class="sec" id="reference">' + secHead(SECTIONS[5]) +
+    '<div class="band"><span class="band__tag">' + t({fr:"Statuts métier", ar:"حا�ات ا�ع�&�"}) + '</span></div>' +
+    '<div class="refs">' + sets + '</div>' +
+    '<details class="routes"><summary>' + t(UI.routesTitle) + '</summary>' +
+      '<div class="routes__body">' + groups + '</div>' +
+    '</details>' +
+    '<footer><span>' + t(UI.footer1) + '</span><span>' + t(UI.footer2) + '</span></footer>' +
+  '</section>';
+}
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 10. Mount + i18n �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+function renderToc() {
+  return SECTIONS.map(function (s) {
+    return '<a href="#' + s.id + '"><span class="n">' + s.n + '</span><span>' + t(s.title) + '</span></a>';
+  }).join("");
+}
+
+function render() {
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
+
+  document.getElementById("brandSub").textContent = t(UI.brandSub);
+  document.getElementById("printBtn").textContent = t(UI.print);
+  document.getElementById("tocTitle").textContent = t(UI.tocTitle);
+  document.getElementById("tocNav").innerHTML = renderToc();
+
+  document.getElementById("main").innerHTML =
+    renderOverview() + renderLifecycle() + renderData() +
+    renderRoles() + renderRequest() + renderReference();
+
+  Array.prototype.forEach.call(document.querySelectorAll(".lang button"), function (b) {
+    b.setAttribute("aria-pressed", b.dataset.lang === LANG ? "true" : "false");
+  });
+
+  initInteractions();
+}
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 11. Interactions �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+var focusedRole = null;
+
+function initInteractions() {
+  /* role cards �  matrix focus */
+  var matrix = document.getElementById("matrix");
+  Array.prototype.forEach.call(document.querySelectorAll(".role"), function (card) {
+    function toggle() {
+      var role = card.dataset.role;
+      focusedRole = (focusedRole === role) ? null : role;
+      Array.prototype.forEach.call(document.querySelectorAll(".role"), function (c) {
+        c.dataset.focus = (c.dataset.role === focusedRole) ? "true" : "false";
+      });
+      matrix.className = "matrix" + (focusedRole ? " focus-" + focusedRole : "");
+    }
+    card.addEventListener("click", toggle);
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+    });
+  });
+
+  /* scroll spy */
+  var links = Array.prototype.slice.call(document.querySelectorAll("#tocNav a"));
+  var sections = SECTIONS.map(function (s) { return document.getElementById(s.id); }).filter(Boolean);
+  function spy() {
+    var pos = window.scrollY + 120;
+    var current = sections[0];
+    sections.forEach(function (s) { if (s.offsetTop <= pos) current = s; });
+    links.forEach(function (a) {
+      a.classList.toggle("on", a.getAttribute("href") === "#" + current.id);
+    });
+  }
+  spy();
+  window.addEventListener("scroll", spy, { passive: true });
+}
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 12. Boot �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+document.addEventListener("click", function (e) {
+  var b = e.target.closest ? e.target.closest(".lang button") : null;
+  if (!b) return;
+  LANG = b.dataset.lang;
+  try { localStorage.setItem("op-doc-lang", LANG); } catch (err) {}
+  focusedRole = null;
+  render();
+});
+
+document.getElementById("printBtn").addEventListener("click", function () { window.print(); });
+
+render();
+
+})();
+</script>
+</body>
+</html>  notes = [
+    { b:{fr:"Un seul endroit", ar:"EC'F H'-/"}, x:{fr:"Tout est regroup� : biens, locataires, baux, loyers, paiements et interventions.", ar:"CD 4J! AJ EC'F H'-/: 'D9B'1'* 'DE3*#,1HF 'D9BH/ 'D%J,'1'* 'DE/AH9'* H'D5J'F)."} },
+    { b:{fr:"Clair et direct", ar:"H'6- H(3J7"}, x:{fr:"Pas besoin de tout comprendre pour commencer � travailler au quotidien.", ar:"D' -',) DAGE CD 4J! D(/! 'D9ED 'DJHEJ."} },
+    { b:{fr:"Toujours � jour", ar:"/'&E'K E-/+"}, x:{fr:"Les soldes et l'�tat des unit�s se mettent � jour au fur et � mesure.", ar:"'D#15/) H-'D) 'DH-/'* **-/Q+ E9 CD %,1'!."} }
+    ].map(function (s) {
+    return '<div class="stat"><div class="stat__n">' + s.n + '</div>' +
+      '<div class="stat__l">' + t({fr:s.fr,ar:s.ar}) + '<span>' + t(s.s) + '</span></div></div>';
+  }).join("");
+
+  var notes = [
+    { b:{fr:"Un seul endroit", ar:"� سخة ��احدة"}, x:{fr:"Toutes les données appartiennent à une seule organisation. Aucune portée par enregistrement : la portée est globale.", ar:"ْ� ا�ب�`ا� ات ��&ؤسسة ��احدة. �ا �`��جد � طا� �ْ� سج�: ا�� طا� شا�&�."} },
+    { b:{fr:"Clair et direct", ar:"D1 أص��`"}, x:{fr:"SQLite managé par Cloudflare. Le même schéma et le même code tournent en local et en production.", ar:"SQLite �&ُدار ب��اسطة Cloudflare. � فس ا��&خطط ��ا�ش�`فرة �`ع�&�ا�  �&ح��`ا�9 ��ف�` ا�إ� تاج."} },
+    { b:{fr:"Occupance dérivée", ar:"ا�إشغا� �&ُست� تج"}, x:{fr:"Le statut d'une unité est toujours recalculé depuis les baux, jamais saisi librement.", ar:"حا�ة ا���حدة تُحسب دائ�&ا�9 �&�  ا�ع���د�R ���ا تُدخ�}� بحر�`ة."} }
+  ].map(function (n) {
+    return '<div class="note"><span class="note__i">i</span><div><b>' + t(n.b) + '</b> � ' + t(n.x) + '</div></div>';
+  }).join("");
+
+  return '<section class="sec" id="overview">' + secHead(SECTIONS[0]) +
+    renderHero() +
+    '<div class="stats">' + stats + '</div>' +
+    '<div class="notes" style="margin-top:16px">' + notes + '</div>' +
+  '</section>';
+}
+
+/* � Lifecycle � */
+function stageCard(s, idx) {
+  var c = COLOR[s.color] || COLOR.slate;
+  var band = s.band;
+  var prevBand = idx > 0 ? STAGES[idx-1].band : null;
+  var bandHtml = (band !== prevBand)
+    ? '<div class="band"><span class="band__tag">' + t(BANDS[band]) + '</span></div>'
+    : "";
+
+  var accessMap = {
+    all:   { cls:"access--all",   fr:"Les 3 rôles",      ar:"ا�أد��ار ا�ث�اثة" },
+    admin: { cls:"access--admin", fr:"Admin + Owner",    ar:"ا��&سؤ��� + ا��&ا�ْ" }
+  };
+  var a = accessMap[s.access];
+
+  var ruleIcon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 9v4"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>';
+
+  return bandHtml +
+    '<div class="stage">' +
+      '<div class="stage__rail">' +
+        '<div class="stage__num" style="--c:' + c.c + ';--c-soft:' + c.soft + ';--c-line:' + c.line + '">' + s.n + '</div>' +
+        '<div class="stage__line" style="--c-line:' + c.line + '"></div>' +
+      '</div>' +
+      '<div class="stage__card" style="--c:' + c.c + '">' +
+        '<div class="stage__top">' +
+          '<span class="stage__name">' + t(s.title) + '</span>' +
+          '<span class="stage__sub">· ' + t(s.sub) + '</span>' +
+          '<span class="stage__tables">' + s.tables.map(function (tb) {
+            return '<span class="tbl">' + tb + '</span>';
+          }).join("") + '</span>' +
+        '</div>' +
+        '<p class="stage__desc">' + t(s.desc) + '</p>' +
+        '<div class="stage__rule" style="--c:' + c.c + '">' + ruleIcon + '<span>' + t(s.rule) + '</span></div>' +
+        '<div class="stage__foot">' +
+          '<span class="access ' + a.cls + '"><span class="dot"></span>' + t({fr:a.fr,ar:a.ar}) + '</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+}
+
+function renderLifecycle() {
+  return '<section class="sec" id="lifecycle">' + secHead(SECTIONS[1]) +
+    '<p style="font-size:13px;color:var(--muted);margin-bottom:20px">' +
+      t({fr:"Huit étapes séquentielles. Chaque étape alimente la suivante ; l'administration ferme la boucle.", ar:"ث�&ا� �` �&راح� �&تس�س�ة. ْ� �&رح�ة تُغذ�` ا�تا��`ة�R ��ا�إدارة تُغ�� ا�ح��ة."}) +
+    '</p>' +
+    '<div class="stages">' + STAGES.map(stageCard).join("") + '</div>' +
+  '</section>';
+}
+
+/* � Data map � */
+function renderData() {
+  var chain = CORE_CHAIN.map(function (n, i) {
+    var c = COLOR[n.color];
+    var node = '<div class="chain__node" style="--c:' + c.c + '"><b>' + n.tbl + '</b><span>' + t({fr:"table",ar:"جد���"}) + '</span></div>';
+    return (i ? '<div class="chain__sep">��</div>' : "") + node;
+  }).join("");
+
+  var cards = ENTITIES.map(function (e) {
+    var rels = e.rels.map(function (r) {
+      return '<div class="rel">' +
+        '<span class="rel__card ' + (r.card.indexOf("N") === 0 ? "many" : (r.card === "1�N" ? "one" : "")) + '">' + r.card + '</span>' +
+        '<code>' + r.to + '</code>' +
+        '<span style="color:var(--muted)">· ' + t(r.note) + '</span>' +
+      '</div>';
+    }).join("");
+    return '<div class="ent">' +
+      '<div class="ent__head"><span class="ent__name">' + t(e.name) + '</span><span class="ent__tbl">' + e.tbl + '</span></div>' +
+      '<div class="ent__rel">' + rels + '</div>' +
+    '</div>';
+  }).join("");
+
+  return '<section class="sec" id="data">' + secHead(SECTIONS[2]) +
+    '<div class="band"><span class="band__tag">' + t({fr:"Chaîne principale", ar:"ا�س�س�ة ا�أساس�`ة"}) + '</span></div>' +
+    '<div class="chain">' + chain + '</div>' +
+    '<div class="band"><span class="band__tag">' + t(UI.links) + '</span></div>' +
+    '<div class="entities">' + cards + '</div>' +
+  '</section>';
+}
+
+/* � Roles � */
+function roleCard(r, i) {
+  var c = COLOR[r.color];
+  var can = r.can[LANG].filter(function (x) { return x !== "�"; }).map(function (x) {
+    return '<span class="chip yes">' + x + '</span>';
+  }).join("");
+  var cant = r.cant[LANG].filter(function (x) { return x !== "�"; }).map(function (x) {
+    return '<span class="chip no">' + x + '</span>';
+  }).join("");
+  var dots = r.coverage.map(function (v, k) {
+    return '<i class="' + (v === "on" ? "on" : (v === "part" ? "part" : "")) + '">' + (k+1) + '</i>';
+  }).join("");
+
+  return '<div class="role" data-role="' + r.key + '" data-focus="false" style="--c:' + c.c + ';--c-soft:' + c.soft + ';--c-line:' + c.line + '" tabindex="0" role="button">' +
+    '<div class="role__in">' +
+      '<div class="role__id">' +
+        '<span class="role__rank">' + t({fr:"NIVEAU",ar:"ا��&ست���0"}) + ' ' + r.rank + '</span>' +
+        '<span class="role__name">' + t(r.name) + '</span>' +
+        '<span class="role__key">' + r.key + '</span>' +
+        '<span class="role__scope">' + t(r.scope) + '</span>' +
+      '</div>' +
+      '<div class="role__body">' +
+        '<div class="role__col"><h4>' + t(UI.can) + '</h4><div class="chips">' + can + '</div>' +
+          '<div class="coverage">' + dots + '<span class="coverage__lbl">' + t(UI.coverage) + '</span></div>' +
+        '</div>' +
+        '<div class="role__col"><h4>' + t(UI.cant) + '</h4><div class="chips">' + (cant || '<span class="chip">�</span>') + '</div></div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderMatrix() {
+  var head = '<tr><th>' + t({fr:"Capacité", ar:"ا�ص�اح�`ة"}) + '</th>' +
+    ROLES.map(function (r) {
+      return '<th class="col-' + r.key + '">' + t(r.name) + '</th>';
+    }).join("") + '</tr>';
+
+  var body = CAP_GROUPS.map(function (g) {
+    var rows = g.caps.map(function (cap) {
+      var cells = ROLES.map(function (r) {
+        var ok = has(r.key, cap.id);
+        return '<td class="col-' + r.key + '"><span class="mark ' + (ok ? "y" : "n") + '" title="' + (ok ? t(UI.legendYes) : t(UI.legendNo)) + '">' + (ok ? "�S" : "�S") + '</span></td>';
+      }).join("");
+      return '<tr><td><div class="cap"><code>' + cap.id + '</code><em>' + t(cap.label) + '</em></div></td>' + cells + '</tr>';
+    }).join("");
+    return '<tr class="grp"><td colspan="4">' + t(g.name) + '</td></tr>' + rows;
+  }).join("");
+
+  return '<div class="matrix-wrap">' +
+    '<div class="matrix-hd">' +
+      '<div><h3>' + t(UI.matrixTitle) + '</h3><p>' + t(UI.matrixSub) + '</p></div>' +
+      '<div class="legend">' +
+        '<span><b style="color:var(--ok)">�S</b>' + t(UI.legendYes) + '</span>' +
+        '<span><b style="color:var(--no)">�S</b>' + t(UI.legendNo) + '</span>' +
+      '</div>' +
+    '</div>' +
+    '<table class="matrix" id="matrix"><thead>' + head + '</thead><tbody>' + body + '</tbody></table>' +
+  '</div>';
+}
+
+function renderRoles() {
+  var base = '<div class="note" style="margin-top:14px"><span class="note__i">�0�</span><div>' +
+    '<b>' + t(UI.basePlane) + '</b> � ' + t(UI.basePlaneTxt) + '</div></div>';
+
+  return '<section class="sec" id="roles">' + secHead(SECTIONS[3]) +
+    '<div class="ladder">' + ROLES.map(roleCard).join("") + '</div>' +
+    renderMatrix() + base +
+  '</section>';
+}
+
+/* � Request pipeline � */
+function renderRequest() {
+  var cards = STEPS.map(function (s) {
+    return '<div class="step"><span class="step__n">' + s.n + '</span>' +
+      '<b>' + t(s.title) + '</b><p>' + t(s.text) + '</p></div>';
+  }).join("");
+
+  var pub = '<div class="step step--public" style="grid-column:1/-1">' +
+    '<span class="step__n">!</span><b>' + t({fr:"Exception : routes publiques", ar:"استث� اء: ا��&سارات ا�عا�&ة"}) + '</b>' +
+    '<p>' + t(UI.publicRoutes) + '</p></div>';
+
+  return '<section class="sec" id="request">' + secHead(SECTIONS[4]) +
+    '<div class="pipe">' + cards + pub + '</div>' +
+  '</section>';
+}
+
+/* � Reference � */
+function renderReference() {
+  var sets = STATUS_SETS.map(function (s) {
+    return '<div class="ref"><h4>' + t(s.title) + ' · <span style="font-family:var(--mono);text-transform:none;letter-spacing:0">' + s.items.length + '</span></h4>' +
+      '<div class="st">' + s.items.map(function (x) {
+        return '<span class="' + s.cls + '">' + x + '</span>';
+      }).join("") + '</div></div>';
+  }).join("");
+
+  var groups = ROUTE_GROUPS.map(function (g) {
+    var lis = g.items.map(function (it) {
+      return '<li><b class="' + it[0] + '">' + it[1] + '</b>' + it[2] + '</li>';
+    }).join("");
+    return '<div class="rg"><h5>' + g.name + '</h5><ul>' + lis + '</ul></div>';
+  }).join("");
+
+  return '<section class="sec" id="reference">' + secHead(SECTIONS[5]) +
+    '<div class="band"><span class="band__tag">' + t({fr:"Statuts métier", ar:"حا�ات ا�ع�&�"}) + '</span></div>' +
+    '<div class="refs">' + sets + '</div>' +
+    '<details class="routes"><summary>' + t(UI.routesTitle) + '</summary>' +
+      '<div class="routes__body">' + groups + '</div>' +
+    '</details>' +
+    '<footer><span>' + t(UI.footer1) + '</span><span>' + t(UI.footer2) + '</span></footer>' +
+  '</section>';
+}
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 10. Mount + i18n �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+function renderToc() {
+  return SECTIONS.map(function (s) {
+    return '<a href="#' + s.id + '"><span class="n">' + s.n + '</span><span>' + t(s.title) + '</span></a>';
+  }).join("");
+}
+
+function render() {
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
+
+  document.getElementById("brandSub").textContent = t(UI.brandSub);
+  document.getElementById("printBtn").textContent = t(UI.print);
+  document.getElementById("tocTitle").textContent = t(UI.tocTitle);
+  document.getElementById("tocNav").innerHTML = renderToc();
+
+  document.getElementById("main").innerHTML =
+    renderOverview() + renderLifecycle() + renderData() +
+    renderRoles() + renderRequest() + renderReference();
+
+  Array.prototype.forEach.call(document.querySelectorAll(".lang button"), function (b) {
+    b.setAttribute("aria-pressed", b.dataset.lang === LANG ? "true" : "false");
+  });
+
+  initInteractions();
+}
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 11. Interactions �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+var focusedRole = null;
+
+function initInteractions() {
+  /* role cards �  matrix focus */
+  var matrix = document.getElementById("matrix");
+  Array.prototype.forEach.call(document.querySelectorAll(".role"), function (card) {
+    function toggle() {
+      var role = card.dataset.role;
+      focusedRole = (focusedRole === role) ? null : role;
+      Array.prototype.forEach.call(document.querySelectorAll(".role"), function (c) {
+        c.dataset.focus = (c.dataset.role === focusedRole) ? "true" : "false";
+      });
+      matrix.className = "matrix" + (focusedRole ? " focus-" + focusedRole : "");
+    }
+    card.addEventListener("click", toggle);
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+    });
+  });
+
+  /* scroll spy */
+  var links = Array.prototype.slice.call(document.querySelectorAll("#tocNav a"));
+  var sections = SECTIONS.map(function (s) { return document.getElementById(s.id); }).filter(Boolean);
+  function spy() {
+    var pos = window.scrollY + 120;
+    var current = sections[0];
+    sections.forEach(function (s) { if (s.offsetTop <= pos) current = s; });
+    links.forEach(function (a) {
+      a.classList.toggle("on", a.getAttribute("href") === "#" + current.id);
+    });
+  }
+  spy();
+  window.addEventListener("scroll", spy, { passive: true });
+}
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 12. Boot �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+document.addEventListener("click", function (e) {
+  var b = e.target.closest ? e.target.closest(".lang button") : null;
+  if (!b) return;
+  LANG = b.dataset.lang;
+  try { localStorage.setItem("op-doc-lang", LANG); } catch (err) {}
+  focusedRole = null;
+  render();
+});
+
+document.getElementById("printBtn").addEventListener("click", function () { window.print(); });
+
+render();
+
+})();
+</script>
+</body>
+</html>  notes = [
+    { b:{fr:"Un seul endroit", ar:"???? ????"}, x:{fr:"Tout est regroup? : biens, locataires, baux, loyers, paiements et interventions.", ar:"?? ??? ?? ???? ????: ????????? ??????????? ??????? ?????????? ????????? ????????."} },
+    { b:{fr:"Clair et direct", ar:"???? ?????"}, x:{fr:"Pas besoin de tout comprendre pour commencer ? travailler au quotidien.", ar:"?? ???? ???? ?? ??? ???? ????? ??????."} },
+    { b:{fr:"Toujours ? jour", ar:"?????? ????"}, x:{fr:"Les soldes et l'?tat des unit?s se mettent ? jour au fur et ? mesure.", ar:"??????? ????? ??????? ?????? ?? ?? ?????."} }
+    ].map(function (s) {
+    return '<div class="stat"><div class="stat__n">' + s.n + '</div>' +
+      '<div class="stat__l">' + t({fr:s.fr,ar:s.ar}) + '<span>' + t(s.s) + '</span></div></div>';
+  }).join("");
+
+  var notes = [
+    { b:{fr:"Un seul endroit", ar:"� سخة ��احدة"}, x:{fr:"Toutes les données appartiennent à une seule organisation. Aucune portée par enregistrement : la portée est globale.", ar:"ْ� ا�ب�`ا� ات ��&ؤسسة ��احدة. �ا �`��جد � طا� �ْ� سج�: ا�� طا� شا�&�."} },
+    { b:{fr:"Clair et direct", ar:"D1 أص��`"}, x:{fr:"SQLite managé par Cloudflare. Le même schéma et le même code tournent en local et en production.", ar:"SQLite �&ُدار ب��اسطة Cloudflare. � فس ا��&خطط ��ا�ش�`فرة �`ع�&�ا�  �&ح��`ا�9 ��ف�` ا�إ� تاج."} },
+    { b:{fr:"Occupance dérivée", ar:"ا�إشغا� �&ُست� تج"}, x:{fr:"Le statut d'une unité est toujours recalculé depuis les baux, jamais saisi librement.", ar:"حا�ة ا���حدة تُحسب دائ�&ا�9 �&�  ا�ع���د�R ���ا تُدخ�}� بحر�`ة."} }
+  ].map(function (n) {
+    return '<div class="note"><span class="note__i">i</span><div><b>' + t(n.b) + '</b> � ' + t(n.x) + '</div></div>';
+  }).join("");
+
+  return '<section class="sec" id="overview">' + secHead(SECTIONS[0]) +
+    renderHero() +
+    '<div class="stats">' + stats + '</div>' +
+    '<div class="notes" style="margin-top:16px">' + notes + '</div>' +
+  '</section>';
+}
+
+/* � Lifecycle � */
+function stageCard(s, idx) {
+  var c = COLOR[s.color] || COLOR.slate;
+  var band = s.band;
+  var prevBand = idx > 0 ? STAGES[idx-1].band : null;
+  var bandHtml = (band !== prevBand)
+    ? '<div class="band"><span class="band__tag">' + t(BANDS[band]) + '</span></div>'
+    : "";
+
+  var accessMap = {
+    all:   { cls:"access--all",   fr:"Les 3 rôles",      ar:"ا�أد��ار ا�ث�اثة" },
+    admin: { cls:"access--admin", fr:"Admin + Owner",    ar:"ا��&سؤ��� + ا��&ا�ْ" }
+  };
+  var a = accessMap[s.access];
+
+  var ruleIcon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 9v4"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>';
+
+  return bandHtml +
+    '<div class="stage">' +
+      '<div class="stage__rail">' +
+        '<div class="stage__num" style="--c:' + c.c + ';--c-soft:' + c.soft + ';--c-line:' + c.line + '">' + s.n + '</div>' +
+        '<div class="stage__line" style="--c-line:' + c.line + '"></div>' +
+      '</div>' +
+      '<div class="stage__card" style="--c:' + c.c + '">' +
+        '<div class="stage__top">' +
+          '<span class="stage__name">' + t(s.title) + '</span>' +
+          '<span class="stage__sub">· ' + t(s.sub) + '</span>' +
+          '<span class="stage__tables">' + s.tables.map(function (tb) {
+            return '<span class="tbl">' + tb + '</span>';
+          }).join("") + '</span>' +
+        '</div>' +
+        '<p class="stage__desc">' + t(s.desc) + '</p>' +
+        '<div class="stage__rule" style="--c:' + c.c + '">' + ruleIcon + '<span>' + t(s.rule) + '</span></div>' +
+        '<div class="stage__foot">' +
+          '<span class="access ' + a.cls + '"><span class="dot"></span>' + t({fr:a.fr,ar:a.ar}) + '</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+}
+
+function renderLifecycle() {
+  return '<section class="sec" id="lifecycle">' + secHead(SECTIONS[1]) +
+    '<p style="font-size:13px;color:var(--muted);margin-bottom:20px">' +
+      t({fr:"Huit étapes séquentielles. Chaque étape alimente la suivante ; l'administration ferme la boucle.", ar:"ث�&ا� �` �&راح� �&تس�س�ة. ْ� �&رح�ة تُغذ�` ا�تا��`ة�R ��ا�إدارة تُغ�� ا�ح��ة."}) +
+    '</p>' +
+    '<div class="stages">' + STAGES.map(stageCard).join("") + '</div>' +
+  '</section>';
+}
+
+/* � Data map � */
+function renderData() {
+  var chain = CORE_CHAIN.map(function (n, i) {
+    var c = COLOR[n.color];
+    var node = '<div class="chain__node" style="--c:' + c.c + '"><b>' + n.tbl + '</b><span>' + t({fr:"table",ar:"جد���"}) + '</span></div>';
+    return (i ? '<div class="chain__sep">��</div>' : "") + node;
+  }).join("");
+
+  var cards = ENTITIES.map(function (e) {
+    var rels = e.rels.map(function (r) {
+      return '<div class="rel">' +
+        '<span class="rel__card ' + (r.card.indexOf("N") === 0 ? "many" : (r.card === "1�N" ? "one" : "")) + '">' + r.card + '</span>' +
+        '<code>' + r.to + '</code>' +
+        '<span style="color:var(--muted)">· ' + t(r.note) + '</span>' +
+      '</div>';
+    }).join("");
+    return '<div class="ent">' +
+      '<div class="ent__head"><span class="ent__name">' + t(e.name) + '</span><span class="ent__tbl">' + e.tbl + '</span></div>' +
+      '<div class="ent__rel">' + rels + '</div>' +
+    '</div>';
+  }).join("");
+
+  return '<section class="sec" id="data">' + secHead(SECTIONS[2]) +
+    '<div class="band"><span class="band__tag">' + t({fr:"Chaîne principale", ar:"ا�س�س�ة ا�أساس�`ة"}) + '</span></div>' +
+    '<div class="chain">' + chain + '</div>' +
+    '<div class="band"><span class="band__tag">' + t(UI.links) + '</span></div>' +
+    '<div class="entities">' + cards + '</div>' +
+  '</section>';
+}
+
+/* � Roles � */
+function roleCard(r, i) {
+  var c = COLOR[r.color];
+  var can = r.can[LANG].filter(function (x) { return x !== "�"; }).map(function (x) {
+    return '<span class="chip yes">' + x + '</span>';
+  }).join("");
+  var cant = r.cant[LANG].filter(function (x) { return x !== "�"; }).map(function (x) {
+    return '<span class="chip no">' + x + '</span>';
+  }).join("");
+  var dots = r.coverage.map(function (v, k) {
+    return '<i class="' + (v === "on" ? "on" : (v === "part" ? "part" : "")) + '">' + (k+1) + '</i>';
+  }).join("");
+
+  return '<div class="role" data-role="' + r.key + '" data-focus="false" style="--c:' + c.c + ';--c-soft:' + c.soft + ';--c-line:' + c.line + '" tabindex="0" role="button">' +
+    '<div class="role__in">' +
+      '<div class="role__id">' +
+        '<span class="role__rank">' + t({fr:"NIVEAU",ar:"ا��&ست���0"}) + ' ' + r.rank + '</span>' +
+        '<span class="role__name">' + t(r.name) + '</span>' +
+        '<span class="role__key">' + r.key + '</span>' +
+        '<span class="role__scope">' + t(r.scope) + '</span>' +
+      '</div>' +
+      '<div class="role__body">' +
+        '<div class="role__col"><h4>' + t(UI.can) + '</h4><div class="chips">' + can + '</div>' +
+          '<div class="coverage">' + dots + '<span class="coverage__lbl">' + t(UI.coverage) + '</span></div>' +
+        '</div>' +
+        '<div class="role__col"><h4>' + t(UI.cant) + '</h4><div class="chips">' + (cant || '<span class="chip">�</span>') + '</div></div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderMatrix() {
+  var head = '<tr><th>' + t({fr:"Capacité", ar:"ا�ص�اح�`ة"}) + '</th>' +
+    ROLES.map(function (r) {
+      return '<th class="col-' + r.key + '">' + t(r.name) + '</th>';
+    }).join("") + '</tr>';
+
+  var body = CAP_GROUPS.map(function (g) {
+    var rows = g.caps.map(function (cap) {
+      var cells = ROLES.map(function (r) {
+        var ok = has(r.key, cap.id);
+        return '<td class="col-' + r.key + '"><span class="mark ' + (ok ? "y" : "n") + '" title="' + (ok ? t(UI.legendYes) : t(UI.legendNo)) + '">' + (ok ? "�S" : "�S") + '</span></td>';
+      }).join("");
+      return '<tr><td><div class="cap"><code>' + cap.id + '</code><em>' + t(cap.label) + '</em></div></td>' + cells + '</tr>';
+    }).join("");
+    return '<tr class="grp"><td colspan="4">' + t(g.name) + '</td></tr>' + rows;
+  }).join("");
+
+  return '<div class="matrix-wrap">' +
+    '<div class="matrix-hd">' +
+      '<div><h3>' + t(UI.matrixTitle) + '</h3><p>' + t(UI.matrixSub) + '</p></div>' +
+      '<div class="legend">' +
+        '<span><b style="color:var(--ok)">�S</b>' + t(UI.legendYes) + '</span>' +
+        '<span><b style="color:var(--no)">�S</b>' + t(UI.legendNo) + '</span>' +
+      '</div>' +
+    '</div>' +
+    '<table class="matrix" id="matrix"><thead>' + head + '</thead><tbody>' + body + '</tbody></table>' +
+  '</div>';
+}
+
+function renderRoles() {
+  var base = '<div class="note" style="margin-top:14px"><span class="note__i">�0�</span><div>' +
+    '<b>' + t(UI.basePlane) + '</b> � ' + t(UI.basePlaneTxt) + '</div></div>';
+
+  return '<section class="sec" id="roles">' + secHead(SECTIONS[3]) +
+    '<div class="ladder">' + ROLES.map(roleCard).join("") + '</div>' +
+    renderMatrix() + base +
+  '</section>';
+}
+
+/* � Request pipeline � */
+function renderRequest() {
+  var cards = STEPS.map(function (s) {
+    return '<div class="step"><span class="step__n">' + s.n + '</span>' +
+      '<b>' + t(s.title) + '</b><p>' + t(s.text) + '</p></div>';
+  }).join("");
+
+  var pub = '<div class="step step--public" style="grid-column:1/-1">' +
+    '<span class="step__n">!</span><b>' + t({fr:"Exception : routes publiques", ar:"استث� اء: ا��&سارات ا�عا�&ة"}) + '</b>' +
+    '<p>' + t(UI.publicRoutes) + '</p></div>';
+
+  return '<section class="sec" id="request">' + secHead(SECTIONS[4]) +
+    '<div class="pipe">' + cards + pub + '</div>' +
+  '</section>';
+}
+
+/* � Reference � */
+function renderReference() {
+  var sets = STATUS_SETS.map(function (s) {
+    return '<div class="ref"><h4>' + t(s.title) + ' · <span style="font-family:var(--mono);text-transform:none;letter-spacing:0">' + s.items.length + '</span></h4>' +
+      '<div class="st">' + s.items.map(function (x) {
+        return '<span class="' + s.cls + '">' + x + '</span>';
+      }).join("") + '</div></div>';
+  }).join("");
+
+  var groups = ROUTE_GROUPS.map(function (g) {
+    var lis = g.items.map(function (it) {
+      return '<li><b class="' + it[0] + '">' + it[1] + '</b>' + it[2] + '</li>';
+    }).join("");
+    return '<div class="rg"><h5>' + g.name + '</h5><ul>' + lis + '</ul></div>';
+  }).join("");
+
+  return '<section class="sec" id="reference">' + secHead(SECTIONS[5]) +
+    '<div class="band"><span class="band__tag">' + t({fr:"Statuts métier", ar:"حا�ات ا�ع�&�"}) + '</span></div>' +
+    '<div class="refs">' + sets + '</div>' +
+    '<details class="routes"><summary>' + t(UI.routesTitle) + '</summary>' +
+      '<div class="routes__body">' + groups + '</div>' +
+    '</details>' +
+    '<footer><span>' + t(UI.footer1) + '</span><span>' + t(UI.footer2) + '</span></footer>' +
+  '</section>';
+}
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 10. Mount + i18n �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+function renderToc() {
+  return SECTIONS.map(function (s) {
+    return '<a href="#' + s.id + '"><span class="n">' + s.n + '</span><span>' + t(s.title) + '</span></a>';
+  }).join("");
+}
+
+function render() {
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
+
+  document.getElementById("brandSub").textContent = t(UI.brandSub);
+  document.getElementById("printBtn").textContent = t(UI.print);
+  document.getElementById("tocTitle").textContent = t(UI.tocTitle);
+  document.getElementById("tocNav").innerHTML = renderToc();
+
+  document.getElementById("main").innerHTML =
+    renderOverview() + renderLifecycle() + renderData() +
+    renderRoles() + renderRequest() + renderReference();
+
+  Array.prototype.forEach.call(document.querySelectorAll(".lang button"), function (b) {
+    b.setAttribute("aria-pressed", b.dataset.lang === LANG ? "true" : "false");
+  });
+
+  initInteractions();
+}
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 11. Interactions �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+var focusedRole = null;
+
+function initInteractions() {
+  /* role cards �  matrix focus */
+  var matrix = document.getElementById("matrix");
+  Array.prototype.forEach.call(document.querySelectorAll(".role"), function (card) {
+    function toggle() {
+      var role = card.dataset.role;
+      focusedRole = (focusedRole === role) ? null : role;
+      Array.prototype.forEach.call(document.querySelectorAll(".role"), function (c) {
+        c.dataset.focus = (c.dataset.role === focusedRole) ? "true" : "false";
+      });
+      matrix.className = "matrix" + (focusedRole ? " focus-" + focusedRole : "");
+    }
+    card.addEventListener("click", toggle);
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+    });
+  });
+
+  /* scroll spy */
+  var links = Array.prototype.slice.call(document.querySelectorAll("#tocNav a"));
+  var sections = SECTIONS.map(function (s) { return document.getElementById(s.id); }).filter(Boolean);
+  function spy() {
+    var pos = window.scrollY + 120;
+    var current = sections[0];
+    sections.forEach(function (s) { if (s.offsetTop <= pos) current = s; });
+    links.forEach(function (a) {
+      a.classList.toggle("on", a.getAttribute("href") === "#" + current.id);
+    });
+  }
+  spy();
+  window.addEventListener("scroll", spy, { passive: true });
+}
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 12. Boot �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+document.addEventListener("click", function (e) {
+  var b = e.target.closest ? e.target.closest(".lang button") : null;
+  if (!b) return;
+  LANG = b.dataset.lang;
+  try { localStorage.setItem("op-doc-lang", LANG); } catch (err) {}
+  focusedRole = null;
+  render();
+});
+
+document.getElementById("printBtn").addEventListener("click", function () { window.print(); });
+
+render();
+
+})();
+</script>
+</body>
+</html>  notes = [
+    { b:{fr:"Un seul endroit", ar:"EC'F H'-/"}, x:{fr:"Tout est regroup� : biens, locataires, baux, loyers, paiements et interventions.", ar:"CD 4J! AJ EC'F H'-/: 'D9B'1'* 'DE3*#,1HF 'D9BH/ 'D%J,'1'* 'DE/AH9'* H'D5J'F)."} },
+    { b:{fr:"Clair et direct", ar:"H'6- H(3J7"}, x:{fr:"Pas besoin de tout comprendre pour commencer � travailler au quotidien.", ar:"D' -',) DAGE CD 4J! D(/! 'D9ED 'DJHEJ."} },
+    { b:{fr:"Toujours � jour", ar:"/'&E'K E-/+"}, x:{fr:"Les soldes et l'�tat des unit�s se mettent � jour au fur et � mesure.", ar:"'D#15/) H-'D) 'DH-/'* **-/Q+ E9 CD %,1'!."} }
+    ].map(function (s) {
+    return '<div class="stat"><div class="stat__n">' + s.n + '</div>' +
+      '<div class="stat__l">' + t({fr:s.fr,ar:s.ar}) + '<span>' + t(s.s) + '</span></div></div>';
+  }).join("");
+
+  var notes = [
+    { b:{fr:"Un seul endroit", ar:"� سخة ��احدة"}, x:{fr:"Toutes les données appartiennent à une seule organisation. Aucune portée par enregistrement : la portée est globale.", ar:"ْ� ا�ب�`ا� ات ��&ؤسسة ��احدة. �ا �`��جد � طا� �ْ� سج�: ا�� طا� شا�&�."} },
+    { b:{fr:"Clair et direct", ar:"D1 أص��`"}, x:{fr:"SQLite managé par Cloudflare. Le même schéma et le même code tournent en local et en production.", ar:"SQLite �&ُدار ب��اسطة Cloudflare. � فس ا��&خطط ��ا�ش�`فرة �`ع�&�ا�  �&ح��`ا�9 ��ف�` ا�إ� تاج."} },
+    { b:{fr:"Occupance dérivée", ar:"ا�إشغا� �&ُست� تج"}, x:{fr:"Le statut d'une unité est toujours recalculé depuis les baux, jamais saisi librement.", ar:"حا�ة ا���حدة تُحسب دائ�&ا�9 �&�  ا�ع���د�R ���ا تُدخ�}� بحر�`ة."} }
+  ].map(function (n) {
+    return '<div class="note"><span class="note__i">i</span><div><b>' + t(n.b) + '</b> � ' + t(n.x) + '</div></div>';
+  }).join("");
+
+  return '<section class="sec" id="overview">' + secHead(SECTIONS[0]) +
+    renderHero() +
+    '<div class="stats">' + stats + '</div>' +
+    '<div class="notes" style="margin-top:16px">' + notes + '</div>' +
+  '</section>';
+}
+
+/* � Lifecycle � */
+function stageCard(s, idx) {
+  var c = COLOR[s.color] || COLOR.slate;
+  var band = s.band;
+  var prevBand = idx > 0 ? STAGES[idx-1].band : null;
+  var bandHtml = (band !== prevBand)
+    ? '<div class="band"><span class="band__tag">' + t(BANDS[band]) + '</span></div>'
+    : "";
+
+  var accessMap = {
+    all:   { cls:"access--all",   fr:"Les 3 rôles",      ar:"ا�أد��ار ا�ث�اثة" },
+    admin: { cls:"access--admin", fr:"Admin + Owner",    ar:"ا��&سؤ��� + ا��&ا�ْ" }
+  };
+  var a = accessMap[s.access];
+
+  var ruleIcon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 9v4"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>';
+
+  return bandHtml +
+    '<div class="stage">' +
+      '<div class="stage__rail">' +
+        '<div class="stage__num" style="--c:' + c.c + ';--c-soft:' + c.soft + ';--c-line:' + c.line + '">' + s.n + '</div>' +
+        '<div class="stage__line" style="--c-line:' + c.line + '"></div>' +
+      '</div>' +
+      '<div class="stage__card" style="--c:' + c.c + '">' +
+        '<div class="stage__top">' +
+          '<span class="stage__name">' + t(s.title) + '</span>' +
+          '<span class="stage__sub">· ' + t(s.sub) + '</span>' +
+          '<span class="stage__tables">' + s.tables.map(function (tb) {
+            return '<span class="tbl">' + tb + '</span>';
+          }).join("") + '</span>' +
+        '</div>' +
+        '<p class="stage__desc">' + t(s.desc) + '</p>' +
+        '<div class="stage__rule" style="--c:' + c.c + '">' + ruleIcon + '<span>' + t(s.rule) + '</span></div>' +
+        '<div class="stage__foot">' +
+          '<span class="access ' + a.cls + '"><span class="dot"></span>' + t({fr:a.fr,ar:a.ar}) + '</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+}
+
+function renderLifecycle() {
+  return '<section class="sec" id="lifecycle">' + secHead(SECTIONS[1]) +
+    '<p style="font-size:13px;color:var(--muted);margin-bottom:20px">' +
+      t({fr:"Huit étapes séquentielles. Chaque étape alimente la suivante ; l'administration ferme la boucle.", ar:"ث�&ا� �` �&راح� �&تس�س�ة. ْ� �&رح�ة تُغذ�` ا�تا��`ة�R ��ا�إدارة تُغ�� ا�ح��ة."}) +
+    '</p>' +
+    '<div class="stages">' + STAGES.map(stageCard).join("") + '</div>' +
+  '</section>';
+}
+
+/* � Data map � */
+function renderData() {
+  var chain = CORE_CHAIN.map(function (n, i) {
+    var c = COLOR[n.color];
+    var node = '<div class="chain__node" style="--c:' + c.c + '"><b>' + n.tbl + '</b><span>' + t({fr:"table",ar:"جد���"}) + '</span></div>';
+    return (i ? '<div class="chain__sep">��</div>' : "") + node;
+  }).join("");
+
+  var cards = ENTITIES.map(function (e) {
+    var rels = e.rels.map(function (r) {
+      return '<div class="rel">' +
+        '<span class="rel__card ' + (r.card.indexOf("N") === 0 ? "many" : (r.card === "1�N" ? "one" : "")) + '">' + r.card + '</span>' +
+        '<code>' + r.to + '</code>' +
+        '<span style="color:var(--muted)">· ' + t(r.note) + '</span>' +
+      '</div>';
+    }).join("");
+    return '<div class="ent">' +
+      '<div class="ent__head"><span class="ent__name">' + t(e.name) + '</span><span class="ent__tbl">' + e.tbl + '</span></div>' +
+      '<div class="ent__rel">' + rels + '</div>' +
+    '</div>';
+  }).join("");
+
+  return '<section class="sec" id="data">' + secHead(SECTIONS[2]) +
+    '<div class="band"><span class="band__tag">' + t({fr:"Chaîne principale", ar:"ا�س�س�ة ا�أساس�`ة"}) + '</span></div>' +
+    '<div class="chain">' + chain + '</div>' +
+    '<div class="band"><span class="band__tag">' + t(UI.links) + '</span></div>' +
+    '<div class="entities">' + cards + '</div>' +
+  '</section>';
+}
+
+/* � Roles � */
+function roleCard(r, i) {
+  var c = COLOR[r.color];
+  var can = r.can[LANG].filter(function (x) { return x !== "�"; }).map(function (x) {
+    return '<span class="chip yes">' + x + '</span>';
+  }).join("");
+  var cant = r.cant[LANG].filter(function (x) { return x !== "�"; }).map(function (x) {
+    return '<span class="chip no">' + x + '</span>';
+  }).join("");
+  var dots = r.coverage.map(function (v, k) {
+    return '<i class="' + (v === "on" ? "on" : (v === "part" ? "part" : "")) + '">' + (k+1) + '</i>';
+  }).join("");
+
+  return '<div class="role" data-role="' + r.key + '" data-focus="false" style="--c:' + c.c + ';--c-soft:' + c.soft + ';--c-line:' + c.line + '" tabindex="0" role="button">' +
+    '<div class="role__in">' +
+      '<div class="role__id">' +
+        '<span class="role__rank">' + t({fr:"NIVEAU",ar:"ا��&ست���0"}) + ' ' + r.rank + '</span>' +
+        '<span class="role__name">' + t(r.name) + '</span>' +
+        '<span class="role__key">' + r.key + '</span>' +
+        '<span class="role__scope">' + t(r.scope) + '</span>' +
+      '</div>' +
+      '<div class="role__body">' +
+        '<div class="role__col"><h4>' + t(UI.can) + '</h4><div class="chips">' + can + '</div>' +
+          '<div class="coverage">' + dots + '<span class="coverage__lbl">' + t(UI.coverage) + '</span></div>' +
+        '</div>' +
+        '<div class="role__col"><h4>' + t(UI.cant) + '</h4><div class="chips">' + (cant || '<span class="chip">�</span>') + '</div></div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderMatrix() {
+  var head = '<tr><th>' + t({fr:"Capacité", ar:"ا�ص�اح�`ة"}) + '</th>' +
+    ROLES.map(function (r) {
+      return '<th class="col-' + r.key + '">' + t(r.name) + '</th>';
+    }).join("") + '</tr>';
+
+  var body = CAP_GROUPS.map(function (g) {
+    var rows = g.caps.map(function (cap) {
+      var cells = ROLES.map(function (r) {
+        var ok = has(r.key, cap.id);
+        return '<td class="col-' + r.key + '"><span class="mark ' + (ok ? "y" : "n") + '" title="' + (ok ? t(UI.legendYes) : t(UI.legendNo)) + '">' + (ok ? "�S" : "�S") + '</span></td>';
+      }).join("");
+      return '<tr><td><div class="cap"><code>' + cap.id + '</code><em>' + t(cap.label) + '</em></div></td>' + cells + '</tr>';
+    }).join("");
+    return '<tr class="grp"><td colspan="4">' + t(g.name) + '</td></tr>' + rows;
+  }).join("");
+
+  return '<div class="matrix-wrap">' +
+    '<div class="matrix-hd">' +
+      '<div><h3>' + t(UI.matrixTitle) + '</h3><p>' + t(UI.matrixSub) + '</p></div>' +
+      '<div class="legend">' +
+        '<span><b style="color:var(--ok)">�S</b>' + t(UI.legendYes) + '</span>' +
+        '<span><b style="color:var(--no)">�S</b>' + t(UI.legendNo) + '</span>' +
+      '</div>' +
+    '</div>' +
+    '<table class="matrix" id="matrix"><thead>' + head + '</thead><tbody>' + body + '</tbody></table>' +
+  '</div>';
+}
+
+function renderRoles() {
+  var base = '<div class="note" style="margin-top:14px"><span class="note__i">�0�</span><div>' +
+    '<b>' + t(UI.basePlane) + '</b> � ' + t(UI.basePlaneTxt) + '</div></div>';
+
+  return '<section class="sec" id="roles">' + secHead(SECTIONS[3]) +
+    '<div class="ladder">' + ROLES.map(roleCard).join("") + '</div>' +
+    renderMatrix() + base +
+  '</section>';
+}
+
+/* � Request pipeline � */
+function renderRequest() {
+  var cards = STEPS.map(function (s) {
+    return '<div class="step"><span class="step__n">' + s.n + '</span>' +
+      '<b>' + t(s.title) + '</b><p>' + t(s.text) + '</p></div>';
+  }).join("");
+
+  var pub = '<div class="step step--public" style="grid-column:1/-1">' +
+    '<span class="step__n">!</span><b>' + t({fr:"Exception : routes publiques", ar:"استث� اء: ا��&سارات ا�عا�&ة"}) + '</b>' +
+    '<p>' + t(UI.publicRoutes) + '</p></div>';
+
+  return '<section class="sec" id="request">' + secHead(SECTIONS[4]) +
+    '<div class="pipe">' + cards + pub + '</div>' +
+  '</section>';
+}
+
+/* � Reference � */
+function renderReference() {
+  var sets = STATUS_SETS.map(function (s) {
+    return '<div class="ref"><h4>' + t(s.title) + ' · <span style="font-family:var(--mono);text-transform:none;letter-spacing:0">' + s.items.length + '</span></h4>' +
+      '<div class="st">' + s.items.map(function (x) {
+        return '<span class="' + s.cls + '">' + x + '</span>';
+      }).join("") + '</div></div>';
+  }).join("");
+
+  var groups = ROUTE_GROUPS.map(function (g) {
+    var lis = g.items.map(function (it) {
+      return '<li><b class="' + it[0] + '">' + it[1] + '</b>' + it[2] + '</li>';
+    }).join("");
+    return '<div class="rg"><h5>' + g.name + '</h5><ul>' + lis + '</ul></div>';
+  }).join("");
+
+  return '<section class="sec" id="reference">' + secHead(SECTIONS[5]) +
+    '<div class="band"><span class="band__tag">' + t({fr:"Statuts métier", ar:"حا�ات ا�ع�&�"}) + '</span></div>' +
+    '<div class="refs">' + sets + '</div>' +
+    '<details class="routes"><summary>' + t(UI.routesTitle) + '</summary>' +
+      '<div class="routes__body">' + groups + '</div>' +
+    '</details>' +
+    '<footer><span>' + t(UI.footer1) + '</span><span>' + t(UI.footer2) + '</span></footer>' +
+  '</section>';
+}
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 10. Mount + i18n �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+function renderToc() {
+  return SECTIONS.map(function (s) {
+    return '<a href="#' + s.id + '"><span class="n">' + s.n + '</span><span>' + t(s.title) + '</span></a>';
+  }).join("");
+}
+
+function render() {
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
+
+  document.getElementById("brandSub").textContent = t(UI.brandSub);
+  document.getElementById("printBtn").textContent = t(UI.print);
+  document.getElementById("tocTitle").textContent = t(UI.tocTitle);
+  document.getElementById("tocNav").innerHTML = renderToc();
+
+  document.getElementById("main").innerHTML =
+    renderOverview() + renderLifecycle() + renderData() +
+    renderRoles() + renderRequest() + renderReference();
+
+  Array.prototype.forEach.call(document.querySelectorAll(".lang button"), function (b) {
+    b.setAttribute("aria-pressed", b.dataset.lang === LANG ? "true" : "false");
+  });
+
+  initInteractions();
+}
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 11. Interactions �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+var focusedRole = null;
+
+function initInteractions() {
+  /* role cards �  matrix focus */
+  var matrix = document.getElementById("matrix");
+  Array.prototype.forEach.call(document.querySelectorAll(".role"), function (card) {
+    function toggle() {
+      var role = card.dataset.role;
+      focusedRole = (focusedRole === role) ? null : role;
+      Array.prototype.forEach.call(document.querySelectorAll(".role"), function (c) {
+        c.dataset.focus = (c.dataset.role === focusedRole) ? "true" : "false";
+      });
+      matrix.className = "matrix" + (focusedRole ? " focus-" + focusedRole : "");
+    }
+    card.addEventListener("click", toggle);
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+    });
+  });
+
+  /* scroll spy */
+  var links = Array.prototype.slice.call(document.querySelectorAll("#tocNav a"));
+  var sections = SECTIONS.map(function (s) { return document.getElementById(s.id); }).filter(Boolean);
+  function spy() {
+    var pos = window.scrollY + 120;
+    var current = sections[0];
+    sections.forEach(function (s) { if (s.offsetTop <= pos) current = s; });
+    links.forEach(function (a) {
+      a.classList.toggle("on", a.getAttribute("href") === "#" + current.id);
+    });
+  }
+  spy();
+  window.addEventListener("scroll", spy, { passive: true });
+}
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 12. Boot �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+document.addEventListener("click", function (e) {
+  var b = e.target.closest ? e.target.closest(".lang button") : null;
+  if (!b) return;
+  LANG = b.dataset.lang;
+  try { localStorage.setItem("op-doc-lang", LANG); } catch (err) {}
+  focusedRole = null;
+  render();
+});
+
+document.getElementById("printBtn").addEventListener("click", function () { window.print(); });
+
+render();
+
+})();
+</script>
+</body>
+</html>  notes = [
+    { b:{fr:"Un seul endroit", ar:"EC'F H'-/"}, x:{fr:"Tout est regroup� : biens, locataires, baux, loyers, paiements et interventions.", ar:"CD 4J! AJ EC'F H'-/: 'D9B'1'* 'DE3*#,1HF 'D9BH/ 'D%J,'1'* 'DE/AH9'* H'D5J'F)."} },
+    { b:{fr:"Clair et direct", ar:"H'6- H(3J7"}, x:{fr:"Pas besoin de tout comprendre pour commencer � travailler au quotidien.", ar:"D' -',) DAGE CD 4J! D(/! 'D9ED 'DJHEJ."} },
+    { b:{fr:"Toujours � jour", ar:"/'&E'K E-/+"}, x:{fr:"Les soldes et l'�tat des unit�s se mettent � jour au fur et � mesure.", ar:"'D#15/) H-'D) 'DH-/'* **-/Q+ E9 CD %,1'!."} }
+    ].map(function (s) {
+    return '<div class="stat"><div class="stat__n">' + s.n + '</div>' +
+      '<div class="stat__l">' + t({fr:s.fr,ar:s.ar}) + '<span>' + t(s.s) + '</span></div></div>';
+  }).join("");
+
+  var notes = [
+    { b:{fr:"Un seul endroit", ar:"� سخة ��احدة"}, x:{fr:"Toutes les données appartiennent à une seule organisation. Aucune portée par enregistrement : la portée est globale.", ar:"ْ� ا�ب�`ا� ات ��&ؤسسة ��احدة. �ا �`��جد � طا� �ْ� سج�: ا�� طا� شا�&�."} },
+    { b:{fr:"Clair et direct", ar:"D1 أص��`"}, x:{fr:"SQLite managé par Cloudflare. Le même schéma et le même code tournent en local et en production.", ar:"SQLite �&ُدار ب��اسطة Cloudflare. � فس ا��&خطط ��ا�ش�`فرة �`ع�&�ا�  �&ح��`ا�9 ��ف�` ا�إ� تاج."} },
+    { b:{fr:"Occupance dérivée", ar:"ا�إشغا� �&ُست� تج"}, x:{fr:"Le statut d'une unité est toujours recalculé depuis les baux, jamais saisi librement.", ar:"حا�ة ا���حدة تُحسب دائ�&ا�9 �&�  ا�ع���د�R ���ا تُدخ�}� بحر�`ة."} }
+  ].map(function (n) {
+    return '<div class="note"><span class="note__i">i</span><div><b>' + t(n.b) + '</b> � ' + t(n.x) + '</div></div>';
+  }).join("");
+
+  return '<section class="sec" id="overview">' + secHead(SECTIONS[0]) +
+    renderHero() +
+    '<div class="stats">' + stats + '</div>' +
+    '<div class="notes" style="margin-top:16px">' + notes + '</div>' +
+  '</section>';
+}
+
+/* � Lifecycle � */
+function stageCard(s, idx) {
+  var c = COLOR[s.color] || COLOR.slate;
+  var band = s.band;
+  var prevBand = idx > 0 ? STAGES[idx-1].band : null;
+  var bandHtml = (band !== prevBand)
+    ? '<div class="band"><span class="band__tag">' + t(BANDS[band]) + '</span></div>'
+    : "";
+
+  var accessMap = {
+    all:   { cls:"access--all",   fr:"Les 3 rôles",      ar:"ا�أد��ار ا�ث�اثة" },
+    admin: { cls:"access--admin", fr:"Admin + Owner",    ar:"ا��&سؤ��� + ا��&ا�ْ" }
+  };
+  var a = accessMap[s.access];
+
+  var ruleIcon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 9v4"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>';
+
+  return bandHtml +
+    '<div class="stage">' +
+      '<div class="stage__rail">' +
+        '<div class="stage__num" style="--c:' + c.c + ';--c-soft:' + c.soft + ';--c-line:' + c.line + '">' + s.n + '</div>' +
+        '<div class="stage__line" style="--c-line:' + c.line + '"></div>' +
+      '</div>' +
+      '<div class="stage__card" style="--c:' + c.c + '">' +
+        '<div class="stage__top">' +
+          '<span class="stage__name">' + t(s.title) + '</span>' +
+          '<span class="stage__sub">· ' + t(s.sub) + '</span>' +
+          '<span class="stage__tables">' + s.tables.map(function (tb) {
+            return '<span class="tbl">' + tb + '</span>';
+          }).join("") + '</span>' +
+        '</div>' +
+        '<p class="stage__desc">' + t(s.desc) + '</p>' +
+        '<div class="stage__rule" style="--c:' + c.c + '">' + ruleIcon + '<span>' + t(s.rule) + '</span></div>' +
+        '<div class="stage__foot">' +
+          '<span class="access ' + a.cls + '"><span class="dot"></span>' + t({fr:a.fr,ar:a.ar}) + '</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+}
+
+function renderLifecycle() {
+  return '<section class="sec" id="lifecycle">' + secHead(SECTIONS[1]) +
+    '<p style="font-size:13px;color:var(--muted);margin-bottom:20px">' +
+      t({fr:"Huit étapes séquentielles. Chaque étape alimente la suivante ; l'administration ferme la boucle.", ar:"ث�&ا� �` �&راح� �&تس�س�ة. ْ� �&رح�ة تُغذ�` ا�تا��`ة�R ��ا�إدارة تُغ�� ا�ح��ة."}) +
+    '</p>' +
+    '<div class="stages">' + STAGES.map(stageCard).join("") + '</div>' +
+  '</section>';
+}
+
+/* � Data map � */
+function renderData() {
+  var chain = CORE_CHAIN.map(function (n, i) {
+    var c = COLOR[n.color];
+    var node = '<div class="chain__node" style="--c:' + c.c + '"><b>' + n.tbl + '</b><span>' + t({fr:"table",ar:"جد���"}) + '</span></div>';
+    return (i ? '<div class="chain__sep">��</div>' : "") + node;
+  }).join("");
+
+  var cards = ENTITIES.map(function (e) {
+    var rels = e.rels.map(function (r) {
+      return '<div class="rel">' +
+        '<span class="rel__card ' + (r.card.indexOf("N") === 0 ? "many" : (r.card === "1�N" ? "one" : "")) + '">' + r.card + '</span>' +
+        '<code>' + r.to + '</code>' +
+        '<span style="color:var(--muted)">· ' + t(r.note) + '</span>' +
+      '</div>';
+    }).join("");
+    return '<div class="ent">' +
+      '<div class="ent__head"><span class="ent__name">' + t(e.name) + '</span><span class="ent__tbl">' + e.tbl + '</span></div>' +
+      '<div class="ent__rel">' + rels + '</div>' +
+    '</div>';
+  }).join("");
+
+  return '<section class="sec" id="data">' + secHead(SECTIONS[2]) +
+    '<div class="band"><span class="band__tag">' + t({fr:"Chaîne principale", ar:"ا�س�س�ة ا�أساس�`ة"}) + '</span></div>' +
+    '<div class="chain">' + chain + '</div>' +
+    '<div class="band"><span class="band__tag">' + t(UI.links) + '</span></div>' +
+    '<div class="entities">' + cards + '</div>' +
+  '</section>';
+}
+
+/* � Roles � */
+function roleCard(r, i) {
+  var c = COLOR[r.color];
+  var can = r.can[LANG].filter(function (x) { return x !== "�"; }).map(function (x) {
+    return '<span class="chip yes">' + x + '</span>';
+  }).join("");
+  var cant = r.cant[LANG].filter(function (x) { return x !== "�"; }).map(function (x) {
+    return '<span class="chip no">' + x + '</span>';
+  }).join("");
+  var dots = r.coverage.map(function (v, k) {
+    return '<i class="' + (v === "on" ? "on" : (v === "part" ? "part" : "")) + '">' + (k+1) + '</i>';
+  }).join("");
+
+  return '<div class="role" data-role="' + r.key + '" data-focus="false" style="--c:' + c.c + ';--c-soft:' + c.soft + ';--c-line:' + c.line + '" tabindex="0" role="button">' +
+    '<div class="role__in">' +
+      '<div class="role__id">' +
+        '<span class="role__rank">' + t({fr:"NIVEAU",ar:"ا��&ست���0"}) + ' ' + r.rank + '</span>' +
+        '<span class="role__name">' + t(r.name) + '</span>' +
+        '<span class="role__key">' + r.key + '</span>' +
+        '<span class="role__scope">' + t(r.scope) + '</span>' +
+      '</div>' +
+      '<div class="role__body">' +
+        '<div class="role__col"><h4>' + t(UI.can) + '</h4><div class="chips">' + can + '</div>' +
+          '<div class="coverage">' + dots + '<span class="coverage__lbl">' + t(UI.coverage) + '</span></div>' +
+        '</div>' +
+        '<div class="role__col"><h4>' + t(UI.cant) + '</h4><div class="chips">' + (cant || '<span class="chip">�</span>') + '</div></div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderMatrix() {
+  var head = '<tr><th>' + t({fr:"Capacité", ar:"ا�ص�اح�`ة"}) + '</th>' +
+    ROLES.map(function (r) {
+      return '<th class="col-' + r.key + '">' + t(r.name) + '</th>';
+    }).join("") + '</tr>';
+
+  var body = CAP_GROUPS.map(function (g) {
+    var rows = g.caps.map(function (cap) {
+      var cells = ROLES.map(function (r) {
+        var ok = has(r.key, cap.id);
+        return '<td class="col-' + r.key + '"><span class="mark ' + (ok ? "y" : "n") + '" title="' + (ok ? t(UI.legendYes) : t(UI.legendNo)) + '">' + (ok ? "�S" : "�S") + '</span></td>';
+      }).join("");
+      return '<tr><td><div class="cap"><code>' + cap.id + '</code><em>' + t(cap.label) + '</em></div></td>' + cells + '</tr>';
+    }).join("");
+    return '<tr class="grp"><td colspan="4">' + t(g.name) + '</td></tr>' + rows;
+  }).join("");
+
+  return '<div class="matrix-wrap">' +
+    '<div class="matrix-hd">' +
+      '<div><h3>' + t(UI.matrixTitle) + '</h3><p>' + t(UI.matrixSub) + '</p></div>' +
+      '<div class="legend">' +
+        '<span><b style="color:var(--ok)">�S</b>' + t(UI.legendYes) + '</span>' +
+        '<span><b style="color:var(--no)">�S</b>' + t(UI.legendNo) + '</span>' +
+      '</div>' +
+    '</div>' +
+    '<table class="matrix" id="matrix"><thead>' + head + '</thead><tbody>' + body + '</tbody></table>' +
+  '</div>';
+}
+
+function renderRoles() {
+  var base = '<div class="note" style="margin-top:14px"><span class="note__i">�0�</span><div>' +
+    '<b>' + t(UI.basePlane) + '</b> � ' + t(UI.basePlaneTxt) + '</div></div>';
+
+  return '<section class="sec" id="roles">' + secHead(SECTIONS[3]) +
+    '<div class="ladder">' + ROLES.map(roleCard).join("") + '</div>' +
+    renderMatrix() + base +
+  '</section>';
+}
+
+/* � Request pipeline � */
+function renderRequest() {
+  var cards = STEPS.map(function (s) {
+    return '<div class="step"><span class="step__n">' + s.n + '</span>' +
+      '<b>' + t(s.title) + '</b><p>' + t(s.text) + '</p></div>';
+  }).join("");
+
+  var pub = '<div class="step step--public" style="grid-column:1/-1">' +
+    '<span class="step__n">!</span><b>' + t({fr:"Exception : routes publiques", ar:"استث� اء: ا��&سارات ا�عا�&ة"}) + '</b>' +
+    '<p>' + t(UI.publicRoutes) + '</p></div>';
+
+  return '<section class="sec" id="request">' + secHead(SECTIONS[4]) +
+    '<div class="pipe">' + cards + pub + '</div>' +
+  '</section>';
+}
+
+/* � Reference � */
+function renderReference() {
+  var sets = STATUS_SETS.map(function (s) {
+    return '<div class="ref"><h4>' + t(s.title) + ' · <span style="font-family:var(--mono);text-transform:none;letter-spacing:0">' + s.items.length + '</span></h4>' +
+      '<div class="st">' + s.items.map(function (x) {
+        return '<span class="' + s.cls + '">' + x + '</span>';
+      }).join("") + '</div></div>';
+  }).join("");
+
+  var groups = ROUTE_GROUPS.map(function (g) {
+    var lis = g.items.map(function (it) {
+      return '<li><b class="' + it[0] + '">' + it[1] + '</b>' + it[2] + '</li>';
+    }).join("");
+    return '<div class="rg"><h5>' + g.name + '</h5><ul>' + lis + '</ul></div>';
+  }).join("");
+
+  return '<section class="sec" id="reference">' + secHead(SECTIONS[5]) +
+    '<div class="band"><span class="band__tag">' + t({fr:"Statuts métier", ar:"حا�ات ا�ع�&�"}) + '</span></div>' +
+    '<div class="refs">' + sets + '</div>' +
+    '<details class="routes"><summary>' + t(UI.routesTitle) + '</summary>' +
+      '<div class="routes__body">' + groups + '</div>' +
+    '</details>' +
+    '<footer><span>' + t(UI.footer1) + '</span><span>' + t(UI.footer2) + '</span></footer>' +
+  '</section>';
+}
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 10. Mount + i18n �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+function renderToc() {
+  return SECTIONS.map(function (s) {
+    return '<a href="#' + s.id + '"><span class="n">' + s.n + '</span><span>' + t(s.title) + '</span></a>';
+  }).join("");
+}
+
+function render() {
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
+
+  document.getElementById("brandSub").textContent = t(UI.brandSub);
+  document.getElementById("printBtn").textContent = t(UI.print);
+  document.getElementById("tocTitle").textContent = t(UI.tocTitle);
+  document.getElementById("tocNav").innerHTML = renderToc();
+
+  document.getElementById("main").innerHTML =
+    renderOverview() + renderLifecycle() + renderData() +
+    renderRoles() + renderRequest() + renderReference();
+
+  Array.prototype.forEach.call(document.querySelectorAll(".lang button"), function (b) {
+    b.setAttribute("aria-pressed", b.dataset.lang === LANG ? "true" : "false");
+  });
+
+  initInteractions();
+}
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 11. Interactions �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+var focusedRole = null;
+
+function initInteractions() {
+  /* role cards �  matrix focus */
+  var matrix = document.getElementById("matrix");
+  Array.prototype.forEach.call(document.querySelectorAll(".role"), function (card) {
+    function toggle() {
+      var role = card.dataset.role;
+      focusedRole = (focusedRole === role) ? null : role;
+      Array.prototype.forEach.call(document.querySelectorAll(".role"), function (c) {
+        c.dataset.focus = (c.dataset.role === focusedRole) ? "true" : "false";
+      });
+      matrix.className = "matrix" + (focusedRole ? " focus-" + focusedRole : "");
+    }
+    card.addEventListener("click", toggle);
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+    });
+  });
+
+  /* scroll spy */
+  var links = Array.prototype.slice.call(document.querySelectorAll("#tocNav a"));
+  var sections = SECTIONS.map(function (s) { return document.getElementById(s.id); }).filter(Boolean);
+  function spy() {
+    var pos = window.scrollY + 120;
+    var current = sections[0];
+    sections.forEach(function (s) { if (s.offsetTop <= pos) current = s; });
+    links.forEach(function (a) {
+      a.classList.toggle("on", a.getAttribute("href") === "#" + current.id);
+    });
+  }
+  spy();
+  window.addEventListener("scroll", spy, { passive: true });
+}
+
+/* �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� 12. Boot �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"� */
+document.addEventListener("click", function (e) {
+  var b = e.target.closest ? e.target.closest(".lang button") : null;
+  if (!b) return;
+  LANG = b.dataset.lang;
+  try { localStorage.setItem("op-doc-lang", LANG); } catch (err) {}
+  focusedRole = null;
+  render();
+});
+
+document.getElementById("printBtn").addEventListener("click", function () { window.print(); });
+
+render();
+
+})();
+</script>
+</body>
+</html>

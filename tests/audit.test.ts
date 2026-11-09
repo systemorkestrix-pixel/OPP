@@ -4,7 +4,7 @@ import { resolve } from "node:path";
 import type { TestEnv } from "./helpers/d1";
 import { createTestEnv } from "./helpers/d1";
 import { call } from "./helpers/api";
-import app, { AUDIT_DEFAULT_LIMIT, AUDIT_MAX_LIMIT, resetSeedForTests } from "../src/server/index";
+import app, { resetSeedForTests } from "../src/server/index";
 import {
   BASE_NAME,
   BASE_VERSION,
@@ -14,6 +14,12 @@ import {
 } from "../src/server/migrate";
 
 let env: TestEnv;
+
+// Mirrors of the server's audit limits. The server declares them internally (non-exported) in
+// src/server/index.ts because Cloudflare Workers rejects plain-value exports from the worker
+// entry module. The tests below assert the enforced behavior, so the value mirrors live here.
+const AUDIT_DEFAULT_LIMIT = 50;
+const AUDIT_MAX_LIMIT = 200;
 
 beforeEach(() => {
   env = createTestEnv();

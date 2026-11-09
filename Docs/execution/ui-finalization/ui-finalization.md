@@ -288,10 +288,18 @@ UI-finalization diff — all under `src/client/` plus `index.html`:
 - Staged: `index.html`, `src/client/**` (incl. `empty-state.tsx`), this execution record.
 - Never staged: `src/server/index.ts`, `tests/audit.test.ts`, `Docs.zip`, `Docs/Docs.zip`,
   `Docs/execution/P5..P8/`, tc/vt scratch, `.playwright-mcp/`.
-- Hash recorded post-commit (append below).
+- Hash (recorded post-commit): **`184a72df4873d49f1149f91f3bbe36c64d750c13`** (`184a72d`),
+  parent `d249d9e` — single new commit, no amend, not rewritten.
 
 ## Final git verification
 
-(post-commit fill-in, by design — matches the established P-phase record pattern: the commit hash
-and the post-commit HEAD/status/log/SOT-parity checks are recorded into this section immediately
-after the single closure commit is created, since the hash cannot exist before the commit)
+- `git rev-parse HEAD` = `184a72d`; `HEAD^` = `d249d9e` (baseline parent). [VERIFIED — git log]
+- `git show --stat HEAD` = the exact 37-file Phase A closure set; `src/server/index.ts` and
+  `tests/audit.test.ts` are absent from the commit (their inherited modifications remain unstaged
+  in the working tree). [VERIFIED — git show]
+- Post-commit `git status --short` = only the by-design exclusions: `M src/server/index.ts`,
+  `M tests/audit.test.ts`, and untracked `Docs.zip`, `Docs/Docs.zip`, `Docs/execution/P5..P8/`,
+  tc/vt scratch — no Phase A file left uncommitted. [VERIFIED — git status]
+- SOT: `origin/main` is unchanged at the baseline `d249d9e`; local `main` is exactly +1 (the
+  closure commit) ahead. The closure commit was intentionally not pushed in this pass (no push
+  instruction in scope); Phase B will open from this baseline. [VERIFIED — git rev-parse origin/main]

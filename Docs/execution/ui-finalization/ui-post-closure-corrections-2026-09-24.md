@@ -226,6 +226,6 @@ CREATE ACTIONS: FIXED (regression) — all six pages, FR+AR × 375/768/1440 veri
 RTL TABS: FIXED (pre-existing shared-component defect) — AR mirrored + RTL keyboard; FR unchanged
 TESTS: PASS (typecheck exit 0 · 216/216 vitest exit 0)
 BROWSER: PASS (60-run sweep + targeted probes; 0 overflow, 0 console errors)
-COMMIT: <recorded after commit>
+COMMIT: aab9081 (parent 184a72d; 184a72d not amended)
 PUSH: NOT DONE
 ```
